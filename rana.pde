@@ -1,7 +1,7 @@
-float X;
-float Y;
-int X2;
-int Y2;
+float pupilaX1;
+float pupilaY1;
+float pupilaX2;
+float pupilaY2;
 float H;
 float H2;
 
@@ -9,9 +9,6 @@ float H2;
 void setup() {
   size(500, 250);
 }
-
-
-
 
 void draw() {
   //Background
@@ -47,28 +44,31 @@ void draw() {
    if (mouseX-333 != 0) {
     H=(mouseY-75)/float(mouseX-333);
   }
+     if (mouseX-167 != 0) {
+    H2=(mouseY-75)/float(mouseX-167);
+  }
   
 if (sqrt(sq(mouseX-333)+sq(mouseY-75)) < 25) {
-    X=mouseX;
-    Y=mouseY;
+    pupilaX1=mouseX;
+    pupilaY1=mouseY;
     fill(0);
     noStroke();
-    ellipse(X, Y, 30, 30);
+    ellipse(pupilaX1, pupilaY1, 30, 30);
   } else {
     if (mouseX != 0) {
       if (mouseX>=333) {
-        X=sqrt(625/(sq(H)+1));
-        Y=H*X;
+        pupilaX1=sqrt(625/(sq(H)+1));
+        pupilaY1=H*pupilaX1;
       }
       if (mouseX<=333) {
-        X=-sqrt(625/(sq(H)+1));
-        Y=H*X;
+        pupilaX1=-sqrt(625/(sq(H)+1));
+        pupilaY1=H*pupilaX1;
       } 
 
 
       fill(0);
       noStroke();
-      ellipse(X+333, Y+75, 30, 30);
+      ellipse(pupilaX1+333, pupilaY1+75, 30, 30);
     }
   }
   
@@ -78,26 +78,24 @@ if (sqrt(sq(mouseX-333)+sq(mouseY-75)) < 25) {
   }
   
 if (sqrt(sq(mouseX-167)+sq(mouseY-75)) < 25) {
-    X=mouseX;
-    Y=mouseY;
+    pupilaX2=mouseX;
+    pupilaY2=mouseY;
     fill(0);
     noStroke();
-    ellipse(X, Y, 30, 30);
+    ellipse(pupilaX2, pupilaY2, 30, 30);
   } else {
     if (mouseX != 0) {
       if (mouseX>=167) {
-        X=sqrt(625/(sq(H)+1));
-        Y=H*X;
+        pupilaX2=sqrt(625/(sq(H2)+1));
+        pupilaY2=H2*pupilaX2;
       }
       if (mouseX<=167) {
-        X=-sqrt(625/(sq(H)+1));
-        Y=H*X;
+        pupilaX2=-sqrt(625/(sq(H2)+1));
+        pupilaY2=H2*pupilaX2;
       } 
-
-
       fill(0);
       noStroke();
-      ellipse(X+167, Y+75, 30, 30);
+      ellipse(pupilaX2+167, pupilaY2+75, 30, 30);
     }
   }
 }
