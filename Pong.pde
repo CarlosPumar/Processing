@@ -14,7 +14,7 @@ int partida;
 int cont;
 int colorContador;
 
-int colorPerdido=200;
+float colorPerdido=200;
 
 void setup() {
   size(500, 500);
@@ -117,7 +117,7 @@ void draw() {
     textAlign(CENTER);
     text("YOU LOSE", width/2, height/2);
     fill(colorPerdido);
-    colorPerdido=colorPerdido-1;
+    colorPerdido=colorPerdido-0.5;
     if (colorPerdido<0) {
       colorPerdido=0;
     }
