@@ -19,7 +19,7 @@ int colorContador;
 float colorPerdido=200;
 
 void setup() {
-  size(500, 500);
+  size(1000, 500);
   posX=radio;
   posY=radio;
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
@@ -57,6 +57,8 @@ void contador() {
       colorContador=0;
       cont=3;
       partida=1;
+      velX=5;
+      velY=5;
       velXmax=5;
       velYmin=5;
       velYmax=sqrt(sq(velXmax)+sq(velYmin));
