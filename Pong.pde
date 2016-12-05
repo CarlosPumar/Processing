@@ -19,7 +19,7 @@ int colorContador;
 float colorPerdido=200;
 
 void setup() {
-  size(1000, 500);
+  size(500, 500);
   posX=radio;
   posY=radio;
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
@@ -97,7 +97,7 @@ void draw() {
 
   if (partida ==1) {
     background(200);
-    fill((posX)/2);
+    fill(posX*255/width);
     posX=posX+velX;
     posY=posY+velY;
     rect(posX, posY, radio*2, radio*2);
@@ -136,4 +136,3 @@ void draw() {
     text("SPACE TO RETRY", width/2, height*2/3);
   }
 }
-
