@@ -127,5 +127,4 @@ void draw() {
     textSize(25);
     text("SPACE TO RETRY", width/2, height*2/3);
   }
-  println(velX,velY);
 }
