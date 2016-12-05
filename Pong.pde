@@ -1,8 +1,10 @@
-//Pelota
 float posX;
 float posY;
 float velX=5;
+float velXmax=5;
 float velY=5;
+float velYmax;
+float velYmin=5;
 
 float difPos;
 int anchuraPaleta=100;
@@ -20,6 +22,7 @@ void setup() {
   size(500, 500);
   posX=radio;
   posY=radio;
+  velYmax=sqrt(sq(velXmax)+sq(velYmin));
 }
 
 void contador() {
@@ -60,11 +63,11 @@ void contador() {
 
 void rebotePaleta() {
 
-  velX= difPos/15;
+  velX= difPos*velXmax/(anchuraPaleta/2+radio);
   if (difPos <0) {
-    velY= -(difPos*(1-sqrt(2))/15 + 5*sqrt(2));
+    velY= -(-difPos*(velYmin-velYmax)/(anchuraPaleta/2+radio)+velYmax);
   } else {
-    velY= -((-difPos)*(1-sqrt(2))/15 + 5*sqrt(2));
+    velY= -(difPos*(velYmin-velYmax)/(anchuraPaleta/2+radio)+velYmax);
   }
 }
 
@@ -90,7 +93,7 @@ void draw() {
     posX=posX+velX;
     posY=posY+velY;
     rect(posX, posY, radio*2, radio*2);
-    rect(mouseX, 450, anchuraPaleta, 5);
+    rect(mouseX, height*9/10, anchuraPaleta, 5);
     difPos=posX-(mouseX+anchuraPaleta/2-radio);
 
     //ReboteX
@@ -101,7 +104,7 @@ void draw() {
     if (posY>=height-radio*2 || posY<=0) {
       velY=velY*(-1);
     }
-    if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posY>=450-radio*2) {
+    if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posY>=height*9/10-radio*2) {
       rebotePaleta();
     }
     //Perder
@@ -124,4 +127,5 @@ void draw() {
     textSize(25);
     text("SPACE TO RETRY", width/2, height*2/3);
   }
+  println(velX,velY);
 }
