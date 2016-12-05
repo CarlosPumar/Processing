@@ -99,8 +99,8 @@ void draw() {
     posX=posX+velX;
     posY=posY+velY;
     rect(posX, posY, radio*2, radio*2);
-    rect(mouseX, height*9/10, anchuraPaleta, 5);
-    difPos=posX-(mouseX+anchuraPaleta/2-radio);
+    rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, 5);
+    difPos=posX-(mouseX-radio);
 
     //ReboteX
     if (posX>=width-radio*2 || posX<=0) {
@@ -134,3 +134,4 @@ void draw() {
     text("SPACE TO RETRY", width/2, height*2/3);
   }
 }
+
