@@ -57,11 +57,17 @@ void contador() {
       colorContador=0;
       cont=3;
       partida=1;
+      velXmax=5;
+      velYmin=5;
+      velYmax=sqrt(sq(velXmax)+sq(velYmin));
     }
   }
 }
 
 void rebotePaleta() {
+  velXmax=velXmax+0.2;
+  velYmin=velYmin+0.2;
+  velYmax=sqrt(sq(velXmax)+sq(velYmin));
 
   velX= difPos*velXmax/(anchuraPaleta/2+radio);
   if (difPos <0) {
@@ -112,7 +118,7 @@ void draw() {
       partida=2;
     }
   }  
-  
+
   if (partida ==2) {
     background(200);
     textSize(50);
