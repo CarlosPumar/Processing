@@ -1,10 +1,15 @@
 float posX;
 float posY;
 float velX=5;
-float velXmax=5;
 float velY=5;
+
+float inicioVelXmax=5;
+float inicioVelYmin=5;
+
+float velXmax;
 float velYmax;
-float velYmin=5;
+float velYmin;
+float aumentoVelocidad=0.2;
 
 float difPos;
 int anchuraPaleta=100;
@@ -22,6 +27,8 @@ void setup() {
   size(500, 500);
   posX=radio;
   posY=radio;
+  velXmax=inicioVelXmax;
+  velYmin=inicioVelYmin;
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
 }
 
@@ -59,16 +66,16 @@ void contador() {
       partida=1;
       velX=5;
       velY=5;
-      velXmax=5;
-      velYmin=5;
+      velXmax=inicioVelXmax;
+      velYmin=inicioVelYmin;
       velYmax=sqrt(sq(velXmax)+sq(velYmin));
     }
   }
 }
 
 void rebotePaleta() {
-  velXmax=velXmax+0.2;
-  velYmin=velYmin+0.2;
+  velXmax=velXmax+aumentoVelocidad;
+  velYmin=velYmin+aumentoVelocidad;
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
 
   velX= difPos*velXmax/(anchuraPaleta/2+radio);
