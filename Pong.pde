@@ -1,3 +1,6 @@
+/*Proyecto realizado por Carlos Pumar Jiménez,alumno del IES Vicente Aleixandre*/
+
+
 //Posicion de la bola
 float posXball;
 float posYball;
@@ -51,6 +54,7 @@ void draw() {
     lose();
     break;
   }
+  
 }
 
 
@@ -66,7 +70,7 @@ void declaracionVariables() {
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
 }
 
-void contador() {
+void contador() {  //Contador al principio de partidas
 
   if (cont == 0) {
     contadorNumero();
@@ -81,16 +85,19 @@ void contador() {
     contadorNumero();
     pantalla=1;
   }
+  
 }
 
 
-void contadorNumero() {
+void contadorNumero() { //Animacion de cada numero del contador
+
   if (numeroContador>0) {
     textSize(50);
     textAlign(CENTER);
     fill(colorContador);
     text(numeroContador, width/2, height/2);
   }
+  
   colorContador=colorContador+2;
   if (colorContador>=200) {
     background(200);
@@ -98,9 +105,11 @@ void contadorNumero() {
     numeroContador--;
     cont++;
   }
+  
 }
 
 void juego() {
+  
   background(200);
   fill(posXball*255/width);
   posXball=posXball+velX;
@@ -117,16 +126,19 @@ void juego() {
   if (posYball>=height-radio*2 || posYball<=0) {
     velY=velY*(-1);
   }
-  if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio*2) {
+  //Rebote con la paleta
+  if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio*2) { 
     rebotePaleta();
   }
   //Perder
   if (posYball>=height-radio*2) {
     pantalla=2;
   }
+  
 }
 
 void rebotePaleta() {
+ 
   velXmax=velXmax+aumentoVelocidad;
   velYmin=velYmin+aumentoVelocidad;
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
@@ -137,9 +149,12 @@ void rebotePaleta() {
   } else {
     velY= -(difPos*(velYmin-velYmax)/(anchuraPaleta/2+radio)+velYmax);
   }
+  
 }
 
-void lose() {
+
+void lose() {   //Pantalla de LOSE y animacion para volver a intentar
+
   background(200);
   textSize(50);
   fill(0);
@@ -147,19 +162,24 @@ void lose() {
   text("YOU LOSE", width/2, height/2);
   fill(colorPerdido);
   colorPerdido=colorPerdido-0.5;
+ 
   if (colorPerdido<0) {
     colorPerdido=0;
   }
+  
   textSize(25);
   text("SPACE TO RETRY", width/2, height*2/3);
 }
 
+
 void keyPressed() {
+  
   if (key==32 && pantalla==2) {
     background(200);
     colorPerdido=200;
     declaracionVariables();
     pantalla=0;
   }
+  
 }
 
