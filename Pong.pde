@@ -1,5 +1,5 @@
-float posX;
-float posY;
+float posXball;
+float posYball;
 float velX=5;
 float velY=5;
 
@@ -25,8 +25,8 @@ float colorPerdido=200;
 
 void setup() {
   size(500, 500);
-  posX=radio;
-  posY=radio;
+  posXball=radio;
+  posYball=radio;
   velXmax=inicioVelXmax;
   velYmin=inicioVelYmin;
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
@@ -39,26 +39,26 @@ void draw() {
 
   if (partida ==1) {
     background(200);
-    fill(posX*255/width);
-    posX=posX+velX;
-    posY=posY+velY;
-    rect(posX, posY, radio*2, radio*2);
+    fill(posXball*255/width);
+    posXball=posXball+velX;
+    posYball=posYball+velY;
+    rect(posXball, posYball, radio*2, radio*2);
     rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, 5);
-    difPos=posX-(mouseX-radio);
+    difPos=posXball-(mouseX-radio);
 
     //ReboteX
-    if (posX>=width-radio*2 || posX<=0) {
+    if (posXball>=width-radio*2 || posXball<=0) {
       velX=velX*(-1);
     }
     //ReboteY
-    if (posY>=height-radio*2 || posY<=0) {
+    if (posYball>=height-radio*2 || posYball<=0) {
       velY=velY*(-1);
     }
-    if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posY>=height*9/10-radio*2) {
+    if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio*2) {
       rebotePaleta();
     }
     //Perder
-    if (posY>=height-radio*2) {
+    if (posYball>=height-radio*2) {
       partida=2;
     }
   }  
@@ -135,8 +135,8 @@ void rebotePaleta() {
 
 void keyPressed() {
   if (key==32 && partida==2) {
-    posX=radio;
-    posY=radio;
+    posXball=radio;
+    posYball=radio;
     background(200);
     colorPerdido=200;
     cont=0;
