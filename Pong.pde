@@ -1,7 +1,6 @@
 /*Proyecto realizado por Carlos Pumar Jiménez,alumno del IES Vicente Aleixandre*/
 
-
-//Posicion de la bola
+//Variables de la bola
 float posXball;
 float posYball;
 int radio=12;
@@ -25,12 +24,17 @@ float posYpaleta;
 
 int pantalla; //Variable para cambio de pantalla
 
-int cont; //Variable para el contador
+//Variable para el contador
+int cont; 
 int numeroContador;
 
 //Variables para los colores
 int colorContador;
 float colorPerdido=200;
+
+//Variables para el menu
+
+
 
 void setup() {
   size(500, 500);
@@ -40,21 +44,23 @@ void setup() {
 
 void draw() {
 
-  background(200);
   switch(pantalla) {
   case 0:
-    contador();
+    menu();
     break;
 
   case 1:
-    juego();
+    contador();
     break;
 
   case 2:
+    juego();
+    break;
+
+  case 3:
     lose();
     break;
   }
-  
 }
 
 
@@ -70,6 +76,26 @@ void declaracionVariables() {
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
 }
 
+void menu() {
+  background(200);
+  textSize(50);
+  fill(0);
+  textAlign(CENTER);
+  text("PING PONG", width/2, height*1/3);
+  fill(255);
+  rect(width/2-75, height*2/3, 150, 60);
+  fill(0);
+  text("PLAY", width/2, height*2/3+47.5);
+
+  if (mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+65 && mouseY>height*2/3) {
+    fill(0);
+    rect(width/2-75, height*2/3, 150, 60);
+    fill(255);
+    text("PLAY", width/2, height*2/3+47.5);
+  }
+}
+
+
 void contador() {  //Contador al principio de partidas
 
   if (cont == 0) {
@@ -83,9 +109,8 @@ void contador() {  //Contador al principio de partidas
   }
   if (cont == 3) {
     contadorNumero();
-    pantalla=1;
+    pantalla=2;
   }
-  
 }
 
 
@@ -94,10 +119,11 @@ void contadorNumero() { //Animacion de cada numero del contador
   if (numeroContador>0) {
     textSize(50);
     textAlign(CENTER);
+    background(200);
     fill(colorContador);
     text(numeroContador, width/2, height/2);
   }
-  
+
   colorContador=colorContador+2;
   if (colorContador>=200) {
     background(200);
@@ -105,11 +131,10 @@ void contadorNumero() { //Animacion de cada numero del contador
     numeroContador--;
     cont++;
   }
-  
 }
 
 void juego() {
-  
+
   background(200);
   fill(posXball*255/width);
   posXball=posXball+velX;
@@ -132,13 +157,12 @@ void juego() {
   }
   //Perder
   if (posYball>=height-radio*2) {
-    pantalla=2;
+    pantalla=3;
   }
-  
 }
 
 void rebotePaleta() {
- 
+
   velXmax=velXmax+aumentoVelocidad;
   velYmin=velYmin+aumentoVelocidad;
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
@@ -149,7 +173,6 @@ void rebotePaleta() {
   } else {
     velY= -(difPos*(velYmin-velYmax)/(anchuraPaleta/2+radio)+velYmax);
   }
-  
 }
 
 
@@ -162,24 +185,36 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   text("YOU LOSE", width/2, height/2);
   fill(colorPerdido);
   colorPerdido=colorPerdido-0.5;
- 
+
   if (colorPerdido<0) {
     colorPerdido=0;
   }
-  
+
   textSize(25);
   text("SPACE TO RETRY", width/2, height*2/3);
+  text("M TO MENU", width/2, height*2/3+50);
 }
 
 
 void keyPressed() {
-  
-  if (key==32 && pantalla==2) {
+
+  if (key==32 && pantalla==3) {
+    background(200);
+    colorPerdido=200;
+    declaracionVariables();
+    pantalla=1;
+  }
+  if (key==109 && pantalla==3) {
     background(200);
     colorPerdido=200;
     declaracionVariables();
     pantalla=0;
   }
-  
 }
 
+void mouseClicked() {
+  if (pantalla==0 && mouseX< width+75 && mouseX>width/2-75 && mouseY<height*2/3+65 && mouseY>height*2/3) {
+    pantalla=1;
+  }
+}
+q
