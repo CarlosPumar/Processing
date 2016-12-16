@@ -1,82 +1,66 @@
+//Posicion de la bola
 float posXball;
 float posYball;
+int radio=12;
+
+//Variables para la velocidad de la pelota
 float velX=5;
 float velY=5;
-
 float inicioVelXmax=5;
 float inicioVelYmin=5;
-
 float velXmax;
 float velYmax;
 float velYmin;
 float aumentoVelocidad=0.2;
-
 float difPos;
+
+//Variables para la paleta
 int anchuraPaleta=100;
+int alturaPaleta=5;
+float posXpaleta;
+float posYpaleta;
 
-int radio=12;
+int pantalla; //Variable para cambio de pantalla
 
-int partida;
+int cont; //Variable para el contador
 
-int cont;
+//Variables para los colores
 int colorContador;
-
 float colorPerdido=200;
 
 void setup() {
   size(500, 500);
-  posXball=radio;
-  posYball=radio;
-  velXmax=inicioVelXmax;
-  velYmin=inicioVelYmin;
-  velYmax=sqrt(sq(velXmax)+sq(velYmin));
+  declaracionVariables();
 }
 
 
 void draw() {
 
-  contador();
+  background(200);
+  switch(pantalla) {
+  case 0:
+    contador();
+    break;
 
-  if (partida ==1) {
-    background(200);
-    fill(posXball*255/width);
-    posXball=posXball+velX;
-    posYball=posYball+velY;
-    rect(posXball, posYball, radio*2, radio*2);
-    rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, 5);
-    difPos=posXball-(mouseX-radio);
+  case 1:
+    juego();
+    break;
 
-    //ReboteX
-    if (posXball>=width-radio*2 || posXball<=0) {
-      velX=velX*(-1);
-    }
-    //ReboteY
-    if (posYball>=height-radio*2 || posYball<=0) {
-      velY=velY*(-1);
-    }
-    if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio*2) {
-      rebotePaleta();
-    }
-    //Perder
-    if (posYball>=height-radio*2) {
-      partida=2;
-    }
-  }  
-
-  if (partida ==2) {
-    background(200);
-    textSize(50);
-    fill(0);
-    textAlign(CENTER);
-    text("YOU LOSE", width/2, height/2);
-    fill(colorPerdido);
-    colorPerdido=colorPerdido-0.5;
-    if (colorPerdido<0) {
-      colorPerdido=0;
-    }
-    textSize(25);
-    text("SPACE TO RETRY", width/2, height*2/3);
+  case 2:
+    lose();
+    break;
   }
+}
+
+
+void declaracionVariables() {
+  posXball=radio;
+  posYball=radio;
+  velX=5;
+  velY=5;
+  velXmax=inicioVelXmax;
+  velYmin=inicioVelYmin;
+  velYmax=sqrt(sq(velXmax)+sq(velYmin));
 }
 
 void contador() {
@@ -110,13 +94,35 @@ void contador() {
       background(200);
       colorContador=0;
       cont=3;
-      partida=1;
-      velX=5;
-      velY=5;
-      velXmax=inicioVelXmax;
-      velYmin=inicioVelYmin;
-      velYmax=sqrt(sq(velXmax)+sq(velYmin));
+      declaracionVariables();
+      pantalla=1;
     }
+  }
+}
+
+void juego() {
+  background(200);
+  fill(posXball*255/width);
+  posXball=posXball+velX;
+  posYball=posYball+velY;
+  rect(posXball, posYball, radio*2, radio*2);
+  rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, 5);
+  difPos=posXball-(mouseX-radio);
+
+  //ReboteX
+  if (posXball>=width-radio*2 || posXball<=0) {
+    velX=velX*(-1);
+  }
+  //ReboteY
+  if (posYball>=height-radio*2 || posYball<=0) {
+    velY=velY*(-1);
+  }
+  if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio*2) {
+    rebotePaleta();
+  }
+  //Perder
+  if (posYball>=height-radio*2) {
+    pantalla=2;
   }
 }
 
@@ -133,14 +139,26 @@ void rebotePaleta() {
   }
 }
 
+void lose() {
+  background(200);
+  textSize(50);
+  fill(0);
+  textAlign(CENTER);
+  text("YOU LOSE", width/2, height/2);
+  fill(colorPerdido);
+  colorPerdido=colorPerdido-0.5;
+  if (colorPerdido<0) {
+    colorPerdido=0;
+  }
+  textSize(25);
+  text("SPACE TO RETRY", width/2, height*2/3);
+}
+
 void keyPressed() {
-  if (key==32 && partida==2) {
-    posXball=radio;
-    posYball=radio;
+  if (key==32 && pantalla==2) {
     background(200);
     colorPerdido=200;
     cont=0;
-    partida=0;
-    contador();
+    pantalla=0;
   }
 }
