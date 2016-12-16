@@ -123,7 +123,7 @@ void juego() {
     velX=velX*(-1);
   }
   //ReboteY
-  if (posYball>=height-radio*2 || posYball<=0) {
+  if (posYball<=0) {
     velY=velY*(-1);
   }
   //Rebote con la paleta
