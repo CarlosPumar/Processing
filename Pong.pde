@@ -217,4 +217,3 @@ void mouseClicked() {
     pantalla=1;
   }
 }
-q
