@@ -32,6 +32,53 @@ void setup() {
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
 }
 
+
+void draw() {
+
+  contador();
+
+  if (partida ==1) {
+    background(200);
+    fill(posX*255/width);
+    posX=posX+velX;
+    posY=posY+velY;
+    rect(posX, posY, radio*2, radio*2);
+    rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, 5);
+    difPos=posX-(mouseX-radio);
+
+    //ReboteX
+    if (posX>=width-radio*2 || posX<=0) {
+      velX=velX*(-1);
+    }
+    //ReboteY
+    if (posY>=height-radio*2 || posY<=0) {
+      velY=velY*(-1);
+    }
+    if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posY>=height*9/10-radio*2) {
+      rebotePaleta();
+    }
+    //Perder
+    if (posY>=height-radio*2) {
+      partida=2;
+    }
+  }  
+
+  if (partida ==2) {
+    background(200);
+    textSize(50);
+    fill(0);
+    textAlign(CENTER);
+    text("YOU LOSE", width/2, height/2);
+    fill(colorPerdido);
+    colorPerdido=colorPerdido-0.5;
+    if (colorPerdido<0) {
+      colorPerdido=0;
+    }
+    textSize(25);
+    text("SPACE TO RETRY", width/2, height*2/3);
+  }
+}
+
 void contador() {
   textSize(50);
   textAlign(CENTER);
@@ -95,51 +142,5 @@ void keyPressed() {
     cont=0;
     partida=0;
     contador();
-  }
-}
-
-void draw() {
-
-  contador();
-
-  if (partida ==1) {
-    background(200);
-    fill(posX*255/width);
-    posX=posX+velX;
-    posY=posY+velY;
-    rect(posX, posY, radio*2, radio*2);
-    rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, 5);
-    difPos=posX-(mouseX-radio);
-
-    //ReboteX
-    if (posX>=width-radio*2 || posX<=0) {
-      velX=velX*(-1);
-    }
-    //ReboteY
-    if (posY>=height-radio*2 || posY<=0) {
-      velY=velY*(-1);
-    }
-    if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posY>=height*9/10-radio*2) {
-      rebotePaleta();
-    }
-    //Perder
-    if (posY>=height-radio*2) {
-      partida=2;
-    }
-  }  
-
-  if (partida ==2) {
-    background(200);
-    textSize(50);
-    fill(0);
-    textAlign(CENTER);
-    text("YOU LOSE", width/2, height/2);
-    fill(colorPerdido);
-    colorPerdido=colorPerdido-0.5;
-    if (colorPerdido<0) {
-      colorPerdido=0;
-    }
-    textSize(25);
-    text("SPACE TO RETRY", width/2, height*2/3);
   }
 }
