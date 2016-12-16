@@ -23,6 +23,7 @@ float posYpaleta;
 int pantalla; //Variable para cambio de pantalla
 
 int cont; //Variable para el contador
+int numeroContador;
 
 //Variables para los colores
 int colorContador;
@@ -54,6 +55,8 @@ void draw() {
 
 
 void declaracionVariables() {
+  numeroContador=3;
+  cont=0;
   posXball=radio;
   posYball=radio;
   velX=5;
@@ -64,39 +67,36 @@ void declaracionVariables() {
 }
 
 void contador() {
-  textSize(50);
-  textAlign(CENTER);
-  if (cont==0) {
-    fill(colorContador);
-    text("3", width/2, height/2);
-    colorContador=colorContador+2;
-    if (colorContador>=200) {
-      background(200);
-      colorContador=0;
-      cont=1;
-    }
+
+  if (cont == 0) {
+    contadorNumero();
   }
-  if (cont==1) {
-    fill(colorContador);
-    text("2", width/2, height/2);
-    colorContador=colorContador+2;
-    if (colorContador>=200) {
-      background(200);
-      colorContador=0;
-      cont=2;
-    }
+  if (cont == 1) {
+    contadorNumero();
   }
-  if (cont==2) {
+  if (cont == 2) {
+    contadorNumero();
+  }
+  if (cont == 3) {
+    contadorNumero();
+    pantalla=1;
+  }
+}
+
+
+void contadorNumero() {
+  if (numeroContador>0) {
+    textSize(50);
+    textAlign(CENTER);
     fill(colorContador);
-    text("1", width/2, height/2);
-    colorContador=colorContador+2;
-    if (colorContador>=200) {
-      background(200);
-      colorContador=0;
-      cont=3;
-      declaracionVariables();
-      pantalla=1;
-    }
+    text(numeroContador, width/2, height/2);
+  }
+  colorContador=colorContador+2;
+  if (colorContador>=200) {
+    background(200);
+    colorContador=0;
+    numeroContador--;
+    cont++;
   }
 }
 
@@ -158,7 +158,8 @@ void keyPressed() {
   if (key==32 && pantalla==2) {
     background(200);
     colorPerdido=200;
-    cont=0;
+    declaracionVariables();
     pantalla=0;
   }
 }
+
