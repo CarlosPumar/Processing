@@ -139,20 +139,20 @@ void juego() {
   fill(posXball*255/width);
   posXball=posXball+velX;
   posYball=posYball+velY;
-  rect(posXball, posYball, radio*2, radio*2);
+  ellipse(posXball, posYball, radio*2, radio*2);
   rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, 5);
-  difPos=posXball-(mouseX-radio);
+  difPos=posXball-mouseX;
 
   //ReboteX
-  if (posXball>=width-radio*2 || posXball<=0) {
+  if (posXball>=width-radio || posXball<=radio) {
     velX=velX*(-1);
   }
   //ReboteY
-  if (posYball<=0) {
+  if (posYball<=radio) {
     velY=velY*(-1);
   }
   //Rebote con la paleta
-  if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio*2) { 
+  if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio) { 
     rebotePaleta();
   }
   //Perder
@@ -196,7 +196,7 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
 }
 
 
-void keyPressed() {
+void keyPressed() {    //Al perder para reiniciar o para volver al menu
 
   if (key==32 && pantalla==3) {
     background(200);
@@ -212,8 +212,8 @@ void keyPressed() {
   }
 }
 
-void mouseClicked() {
-  if (pantalla==0 && mouseX< width+75 && mouseX>width/2-75 && mouseY<height*2/3+65 && mouseY>height*2/3) {
+void mouseClicked() {   //Pulsar Play en el menu
+  if (pantalla==0 && mouseX< width+75 && mouseX>width/2-75 && mouseY<height*2/3+60 && mouseY>height*2/3) {
     pantalla=1;
   }
 }
