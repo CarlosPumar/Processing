@@ -32,9 +32,6 @@ int numeroContador;
 int colorContador;
 float colorPerdido=200;
 
-//Variables para el menu
-
-
 
 void setup() {
   size(500, 500);
@@ -87,7 +84,7 @@ void menu() {
   fill(0);
   text("PLAY", width/2, height*2/3+47.5);
 
-  if (mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+65 && mouseY>height*2/3) {
+  if (mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+60 && mouseY>height*2/3) {
     fill(0);
     rect(width/2-75, height*2/3, 150, 60);
     fill(255);
