@@ -156,7 +156,7 @@ void juego() {
     rebotePaleta();
   }
   //Perder
-  if (posYball>=height-radio*2) {
+  if (posYball>=height-radio) {
     pantalla=3;
   }
 }
