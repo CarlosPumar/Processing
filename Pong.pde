@@ -213,7 +213,7 @@ void keyPressed() {    //Al perder para reiniciar o para volver al menu
 }
 
 void mouseClicked() {   //Pulsar Play en el menu
-  if (pantalla==0 && mouseX< width+75 && mouseX>width/2-75 && mouseY<height*2/3+60 && mouseY>height*2/3) {
+  if (pantalla==0 && mouseX< width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+60 && mouseY>height*2/3) {
     pantalla=1;
   }
 }
