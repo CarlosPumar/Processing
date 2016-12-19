@@ -140,7 +140,7 @@ void juego() {
   posXball=posXball+velX;
   posYball=posYball+velY;
   ellipse(posXball, posYball, radio*2, radio*2);
-  rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, 5);
+  rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, alturaPaleta);
   difPos=posXball-mouseX;
 
   //ReboteX
