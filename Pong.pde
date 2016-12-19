@@ -79,17 +79,20 @@ void menu() {
   fill(0);
   textAlign(CENTER);
   text("PING PONG", width/2, height*1/3);
-  fill(255);
-  rect(width/2-75, height*2/3, 150, 60);
-  fill(0);
-  text("PLAY", width/2, height*2/3+47.5);
 
+// boton Play
   if (mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+60 && mouseY>height*2/3) {
     fill(0);
     rect(width/2-75, height*2/3, 150, 60);
     fill(255);
     text("PLAY", width/2, height*2/3+47.5);
+  } else {
+    fill(255);
+    rect(width/2-75, height*2/3, 150, 60);
+    fill(0);
+    text("PLAY", width/2, height*2/3+47.5);
   }
+
 }
 
 
