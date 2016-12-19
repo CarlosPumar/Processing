@@ -7,9 +7,9 @@ int radio=12;
 float velX=5;
 float velY=5;
 
-float velXmax;
+float velXmax=5;
 float velYmax;
-float velYmin;
+float velYmin=5;
 
 float difPos;
 
@@ -22,12 +22,6 @@ float posYpaleta;
 void setup() {
   size(500, 500);
 
-  posXball=radio;
-  posYball=radio;
-  velX=5;
-  velY=5;
-  velXmax=5;
-  velYmin=5;
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
   
 }
