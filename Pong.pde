@@ -6,8 +6,8 @@ float posYball;
 int radio=12;
 
 //Variables para la velocidad de la pelota
-float velX=5;
-float velY=5;
+float velX=2;
+float velY=2;
 float inicioVelXmax=5;
 float inicioVelYmin=5;
 float velXmax;
@@ -32,9 +32,13 @@ int numeroContador;
 int colorContador;
 float colorPerdido=200;
 
+Bloque[] y1Bloque = new Bloque[4];
+Bloque[] y2Bloque = new Bloque[4];
+Bloque[] y3Bloque = new Bloque[4];
 
 void setup() {
   size(500, 500);
+  rectMode(CENTER);
   declaracionVariables();
 }
 
@@ -65,7 +69,7 @@ void declaracionVariables() {
   numeroContador=3;
   cont=0;
   posXball=radio;
-  posYball=radio;
+  posYball=100;
   velX=5;
   velY=5;
   velXmax=inicioVelXmax;
@@ -80,19 +84,18 @@ void menu() {
   textAlign(CENTER);
   text("PING PONG", width/2, height*1/3);
 
-// boton Play
-  if (mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+60 && mouseY>height*2/3) {
+  // boton Play
+  if (mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+30 && mouseY>height*2/3-30) {
     fill(0);
-    rect(width/2-75, height*2/3, 150, 60);
+    rect(width/2, height*2/3, 150, 60);
     fill(255);
-    text("PLAY", width/2, height*2/3+47.5);
+    text("PLAY", width/2, height*2/3+20);
   } else {
     fill(255);
-    rect(width/2-75, height*2/3, 150, 60);
+    rect(width/2, height*2/3, 150, 60);
     fill(0);
-    text("PLAY", width/2, height*2/3+47.5);
+    text("PLAY", width/2, height*2/3+20);
   }
-
 }
 
 
@@ -109,6 +112,7 @@ void contador() {  //Contador al principio de partidas
   }
   if (cont == 3) {
     contadorNumero();
+    crearBloque();
     pantalla=2;
   }
 }
@@ -140,7 +144,8 @@ void juego() {
   posXball=posXball+velX;
   posYball=posYball+velY;
   ellipse(posXball, posYball, radio*2, radio*2);
-  rect(mouseX-anchuraPaleta/2, height*9/10, anchuraPaleta, alturaPaleta);
+  rect(mouseX, height*9/10, anchuraPaleta, alturaPaleta);
+  dibujarBloque();
   difPos=posXball-mouseX;
 
   //ReboteX
@@ -195,6 +200,60 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   text("M TO MENU", width/2, height*2/3+50);
 }
 
+//BLOQUES
+
+class Bloque {
+
+  int x, y, z, anchura, altura;
+
+  Bloque (int posX, int posY, int estado) {  //constructor
+    x=posX;
+    y=posY;
+    z=estado;
+    anchura=75;
+    altura=10;
+  }
+  void dibujar() {
+    if (z==1) {
+      rect(x, y, anchura, altura);
+    }
+  }
+  void desaparecer() {
+    if (posXball>x-anchura/2-radio && posXball<x+anchura/2+radio && posYball>y-altura/2-radio && posYball<y+altura/2+radio && z==1) {
+      z=0;
+      velY= velY*(-1);
+    }
+  }
+}
+
+void crearBloque() {
+  for (int i=0; i< y1Bloque.length; i++) {
+    y1Bloque[i]= new Bloque(i*125+60, 20, 1);
+  }
+  for (int h=0; h< y2Bloque.length; h++) {
+    y2Bloque[h]= new Bloque(h*125+60, 50, 1);
+  }  
+  for (int m=y3Bloque.length/8; m< y3Bloque.length; m++) {
+    y3Bloque[m]= new Bloque(m*125+60, 80, 1);
+  }
+}
+
+void dibujarBloque() {
+  for (int i=0; i< y1Bloque.length; i ++) {
+    y1Bloque[i].dibujar();
+    y1Bloque[i].desaparecer();
+  }
+
+  for (int h=0; h< y2Bloque.length; h ++) {
+    y2Bloque[h].dibujar();
+    y2Bloque[h].desaparecer();
+  }
+
+  for (int m=0; m< y2Bloque.length; m ++) {
+    y3Bloque[m].dibujar();
+    y3Bloque[m].desaparecer();
+  }
+}
 
 void keyPressed() {    //Al perder para reiniciar o para volver al menu
 
@@ -213,7 +272,7 @@ void keyPressed() {    //Al perder para reiniciar o para volver al menu
 }
 
 void mouseClicked() {   //Pulsar Play en el menu
-  if (pantalla==0 && mouseX< width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+60 && mouseY>height*2/3) {
+  if (pantalla==0 && mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+30 && mouseY>height*2/3-30) {
     pantalla=1;
   }
 }
