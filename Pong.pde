@@ -52,6 +52,12 @@ Bloque[] y1Bloque = new Bloque[5];
 Bloque[] y2Bloque = new Bloque[5];
 Bloque[] y3Bloque = new Bloque[5];
 
+//Vida
+int vida=3;
+int colorVida1=255;
+int colorVida2=255;
+int colorVida3=255;
+
 void setup() {
   size(700, 600);
   rectInfo=height/20;
@@ -88,9 +94,10 @@ void draw() {
 
 void declaracionVariables() {
   stroke(1);
+  vida=3;
   numeroContador=3;
   cont=0;
-  posXball=radio;
+  posXball=2*radio;
   posYball=height/10+rectInfo+2.5*separacionBloque;
   velX=5;
   velY=5;
@@ -195,22 +202,54 @@ void juego() {
   }
   //Perder
   if (posYball>=height-radio) {
-    pantalla=4;
+    vida--;
+    if (vida>0) {
+      posXball=radio;
+      posYball=height/10+rectInfo+2.5*separacionBloque;
+      velX=velYmax*sqrt(0.5);
+      velY=velYmax*sqrt(0.5);
+    }
   }
 }
 
 void dibujarElementos() {   //dibuja background, rectangulo de informacion, bloques, pelota y paleta
+
   background(200-pausaColor);
+
   fill(170-pausaColor);
   rectMode(CORNER);
   rect(0, 0, width, rectInfo);
   rectMode(CENTER);
+
+  colorVida();
+  fill(colorVida1, 0, 0);
+  ellipse(width/20, rectInfo/2, radio, radio);
+  fill(colorVida2, 0, 0);
+  ellipse(width/20*2, rectInfo/2, radio, radio);
+  fill(colorVida3, 0, 0);
+  ellipse(width/20*3, rectInfo/2, radio, radio);
 
   fill(posXball*255/width-pausaColor);
   ellipse(posXball, posYball, radio*2, radio*2);
   rect(posXpaleta, posYpaleta, anchuraPaleta, alturaPaleta);
 
   dibujarBloque();
+}
+
+void colorVida() {
+
+  if (vida==2) {
+    colorVida3=150;
+  }
+  if (vida==1) {
+    colorVida2=150;
+  }
+  if (vida==0) {
+    pantalla=4;
+    colorVida1=255;
+    colorVida2=255;
+    colorVida3=255;
+  }
 }
 
 void rebotePaleta() {   //rebote de paleta en funcion de difPos
@@ -322,6 +361,7 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
       colorHome=255;
     }
   }
+
   //simbolo retry
   noFill();
   strokeWeight(12);
@@ -334,7 +374,6 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   strokeWeight(1);
   noStroke();
   fill(colorHome);
-
   rect(width*2/3, height*3/4, ladoHome, ladoHome);
   triangle(width*2/3-ladoHome/2-10, height*3/4-ladoHome/2, width*2/3+ladoHome/2+10, height*3/4-ladoHome/2, width*2/3, height*3/4-ladoHome-5);
 }
@@ -363,7 +402,7 @@ void mouseClicked() {
     declaracionVariables();
     pantalla=1;
   }
-  if (mouseX>width*2/3-diametroRetry/2 && mouseX<width*2/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2 && colorHome==255 && pantalla==4) {   //Pulsar botn Menu
+  if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2 && colorHome==255 && pantalla==4) {   //Pulsar botn Menu
     background(200);
     colorPerdido=200;
     declaracionVariables();
