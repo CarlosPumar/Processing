@@ -25,6 +25,14 @@ float posYpaleta;
 //Variable para el rectangulo de informacion en Juego
 int rectInfo;
 
+//Vida
+int vida=3;
+int colorVida1=255;
+int colorVida2=255;
+int colorVida3=255;
+
+int puntuacion; //Variable para la puntuacion del juego
+
 int pantalla; //Variable para cambio de pantalla
 
 //Variables para el contador
@@ -33,9 +41,11 @@ int numeroContador;
 
 //Variables para los colores
 int colorContador;
-float colorPerdido=200;
+float colorBotones=200;
 int estado_colorPerdido;
 int pausaColor;
+float creditosColor;
+float colorExit;
 
 //simbolo retry
 int diametroRetry=50;
@@ -51,12 +61,6 @@ int separacionBloque=35;
 Bloque[] y1Bloque = new Bloque[5];
 Bloque[] y2Bloque = new Bloque[5];
 Bloque[] y3Bloque = new Bloque[5];
-
-//Vida
-int vida=3;
-int colorVida1=255;
-int colorVida2=255;
-int colorVida3=255;
 
 void setup() {
   size(700, 600);
@@ -88,6 +92,10 @@ void draw() {
   case 4:
     lose();
     break;
+
+  case 5:
+    win();
+    break;
   }
 }
 
@@ -95,6 +103,7 @@ void draw() {
 void declaracionVariables() {
   stroke(1);
   vida=3;
+  puntuacion=0;
   numeroContador=3;
   cont=0;
   posXball=2*radio;
@@ -210,16 +219,25 @@ void juego() {
       velY=velYmax*sqrt(0.5);
     }
   }
+  if (puntuacion==15) {
+    pantalla=5;
+  }
 }
 
-void dibujarElementos() {   //dibuja background, rectangulo de informacion, bloques, pelota y paleta
+void dibujarElementos() {   //dibuja background, rectangulo de informacion, puntuacion, vida, bloques, pelota y paleta
 
-  background(200-pausaColor);
+  background(200-pausaColor); 
 
   fill(170-pausaColor);
   rectMode(CORNER);
   rect(0, 0, width, rectInfo);
   rectMode(CENTER);
+
+  fill(255-pausaColor);
+  textAlign(CORNER);
+  textSize(25);
+  text("SCORE :", width*7/10, rectInfo-5);
+  text(puntuacion, width*9/10, rectInfo-5);
 
   colorVida();
   fill(colorVida1, 0, 0);
@@ -286,6 +304,7 @@ class Bloque {
     if (posXball>x-anchura/2-radio && posXball<x+anchura/2+radio && posYball>y-altura/2-radio && posYball<y+altura/2+radio && z==1) {
       z=0;
       velY= velY*(-1);
+      puntuacion++;
     }
   }
 }
@@ -345,22 +364,59 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   fill(0);
   textAlign(CENTER);
   text("YOU LOSE", width/2, height/2-50);
-  fill(colorPerdido);
 
-  colorPerdido=colorPerdido-1.5;
-  colorRetry=colorPerdido;
-  colorHome=colorPerdido;
+  botones();
+}
 
-  if (colorPerdido<0 ) { 
-    colorPerdido=0;
+
+
+//WIN
+void win() {   //Pantalla de LOSE y animacion para volver a intentar
+
+  background(200);
+  textSize(50);
+  fill(0);
+  textAlign(CENTER);
+  text("YOU WIN", width/2, height/2-150);
+
+  botones();
+
+  fill(colorBotones);
+  textSize(30);
+  text("made by Carlos Pumar", width/2, height/2-50);
+}
+
+void botones() {
+  fill(colorBotones);
+
+  colorBotones=colorBotones-1.5;
+  colorRetry=colorBotones;
+  colorHome=colorBotones;
+  colorExit=colorBotones;
+
+  if (colorBotones<0 ) { 
+    colorBotones=0;
 
     if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2) {
       colorRetry=255;
     }
-    if (mouseX>width*2/3-diametroRetry/2 && mouseX<width*2/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2) {
+    if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2) {
       colorHome=255;
     }
+    if (mouseX>width*1/3-50 && mouseX<width*1/3+50 && mouseY>height*3/4-25 && mouseY<height*3/4+25) {
+      colorExit=255;
+    }
   }
+
+  home();
+  if (pantalla==4) {
+    retry();
+  } else {
+    salir();
+  }
+}
+
+void retry() {
 
   //simbolo retry
   noFill();
@@ -369,8 +425,11 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   arc(width*1/3, height*3/4, diametroRetry, diametroRetry, 0, PI*3/2);
   fill(colorRetry);
   triangle(width*1/3, height*3/4-diametroRetry/4, width*1/3, height*3/4-(diametroRetry*3)/4, width*1/3+diametroRetry/3, height*3/4-diametroRetry/2);
+}
 
-  //boton menu
+void home() {
+
+  //boton home
   strokeWeight(1);
   noStroke();
   fill(colorHome);
@@ -378,6 +437,12 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   triangle(width*2/3-ladoHome/2-10, height*3/4-ladoHome/2, width*2/3+ladoHome/2+10, height*3/4-ladoHome/2, width*2/3, height*3/4-ladoHome-5);
 }
 
+void salir() {
+
+  fill(colorExit);
+  textSize(50);
+  text("EXIT", width*1/3, height*31/40);
+}
 
 
 //BOTONES Y TECLAS
@@ -396,16 +461,19 @@ void mouseClicked() {
     pantalla=2;
     pausaColor=0;
   }
+  if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2 && colorHome==255 && pantalla==4) {   //Pulsar botn Menu
+    background(200);
+    colorBotones=200;
+    declaracionVariables();
+    pantalla=0;
+  }
   if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2 && colorRetry==255 && pantalla==4) {  //Pulsar boton Retry
     background(200);
-    colorPerdido=200;
+    colorBotones=200;
     declaracionVariables();
     pantalla=1;
   }
-  if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2 && colorHome==255 && pantalla==4) {   //Pulsar botn Menu
-    background(200);
-    colorPerdido=200;
-    declaracionVariables();
-    pantalla=0;
+  if (mouseX>width*1/3-50 && mouseX<width*1/3+50 && mouseY>height*3/4-25 && mouseY<height*3/4+25 && colorRetry==255 && pantalla==5) {  //Pulsar boton Retry
+    exit();
   }
 }
