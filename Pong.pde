@@ -31,6 +31,7 @@ int numeroContador;
 //Variables para los colores
 int colorContador;
 float colorPerdido=200;
+int pausaColor;
 
 Bloque[] y1Bloque = new Bloque[4];
 Bloque[] y2Bloque = new Bloque[4];
@@ -149,13 +150,16 @@ void contadorNumero() { //Animacion de cada numero del contador
 //JUEGO
 void juego() {
 
-  background(200);
-  fill(posXball*255/width);
+  //posicion de la pelota
   posXball=posXball+velX;
   posYball=posYball+velY;
-  ellipse(posXball, posYball, radio*2, radio*2);
-  rect(mouseX, height*9/10, anchuraPaleta, alturaPaleta);
-  dibujarBloque();
+
+  //posicion de la paleta
+  posXpaleta=mouseX;
+  posYpaleta=height*9/10;
+
+  dibujarElementos();
+
   difPos=posXball-mouseX;
 
   //ReboteX
@@ -172,8 +176,16 @@ void juego() {
   }
   //Perder
   if (posYball>=height-radio) {
-    pantalla=3;
+    pantalla=4;
   }
+}
+
+void dibujarElementos() {
+  background(200-pausaColor);
+  fill(posXball*255/width-pausaColor);
+  ellipse(posXball, posYball, radio*2, radio*2);
+  rect(posXpaleta, posYpaleta, anchuraPaleta, alturaPaleta);
+  dibujarBloque();
 }
 
 void rebotePaleta() {
@@ -245,6 +257,21 @@ void dibujarBloque() {
 
 
 
+//PAUSA
+void pausa() {
+  pausaColor=50;
+  dibujarElementos();
+
+  if (mouseX>width/2-75 && mouseX<width/2+75 && mouseY>height/2-45 && mouseY<height/2+5) {
+    fill(255);
+  } else {
+    fill(255, 0, 0);
+  }
+  textAlign(CENTER);
+  text("PAUSE", width/2, height/2);
+}
+
+
 //LOSE
 void lose() {   //Pantalla de LOSE y animacion para volver a intentar
 
@@ -270,22 +297,31 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
 //RESTO
 void keyPressed() {    //Al perder para reiniciar o para volver al menu
 
-  if (key==32 && pantalla==3) {
+  if (key==32 && pantalla==4) {  //Al perder, reiniciar
     background(200);
     colorPerdido=200;
     declaracionVariables();
     pantalla=1;
   }
-  if (key==109 && pantalla==3) {
+  if (key==109 && pantalla==4) {   //Al perder, volver al menu
     background(200);
     colorPerdido=200;
     declaracionVariables();
     pantalla=0;
   }
+  if (key==112 && pantalla==2) {   //Pause
+    pantalla=3;
+  }
 }
 
-void mouseClicked() {   //Pulsar Play en el menu
-  if (pantalla==0 && mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+30 && mouseY>height*2/3-30) {
+void mouseClicked() {  
+  if (pantalla==0 && mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+30 && mouseY>height*2/3-30) {   //Pulsar Play en el menu
     pantalla=1;
   }
+  if (mouseX>width/2-75 && mouseX<width/2+75 && mouseY>height/2-45 && mouseY<height/2+5) {    //Volver a Juego despues de Pause
+    pantalla=2;
+    pausaColor=0;
+  }
+}
+
 }
