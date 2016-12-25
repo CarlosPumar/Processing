@@ -462,7 +462,7 @@ void mouseClicked() {
     pantalla=2;
     pausaColor=0;
   }
-  if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2 && colorHome==255 && pantalla==4) {   //Pulsar botn Menu
+  if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2 && colorHome==255 && (pantalla==4 || pantalla==5)) {   //Pulsar botn Menu
     background(200);
     colorBotones=200;
     declaracionVariables();
@@ -478,3 +478,4 @@ void mouseClicked() {
     exit();
   }
 }
+
