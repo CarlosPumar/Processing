@@ -45,12 +45,12 @@ float colorHome;
 //Variables para los bloque
 int separacionBloque=35;
 
-Bloque[] y1Bloque = new Bloque[4];
-Bloque[] y2Bloque = new Bloque[4];
-Bloque[] y3Bloque = new Bloque[4];
+Bloque[] y1Bloque = new Bloque[5];
+Bloque[] y2Bloque = new Bloque[5];
+Bloque[] y3Bloque = new Bloque[5];
 
 void setup() {
-  size(500, 500);
+  size(625, 500);
   rectMode(CENTER);
   declaracionVariables();
 }
@@ -87,7 +87,7 @@ void declaracionVariables() {
   numeroContador=3;
   cont=0;
   posXball=radio;
-  posYball=100;
+  posYball=height/10+2.5*separacionBloque;
   velX=5;
   velY=5;
   velXmax=inicioVelXmax;
@@ -242,13 +242,13 @@ class Bloque {
 
 void crearBloque() {
   for (int i=0; i< y1Bloque.length; i++) {
-    y1Bloque[i]= new Bloque(i*125+60, height/10, 1);
+    y1Bloque[i]= new Bloque(i*width/5+width/10, height/10, 1);
   }
   for (int h=0; h< y2Bloque.length; h++) {
-    y2Bloque[h]= new Bloque(h*125+60, height/10+separacionBloque, 1);
+    y2Bloque[h]= new Bloque(h*width/5+width/10, height/10+separacionBloque, 1);
   }  
   for (int m=y3Bloque.length/8; m< y3Bloque.length; m++) {
-    y3Bloque[m]= new Bloque(m*125+60, height/10+2*separacionBloque, 1);
+    y3Bloque[m]= new Bloque(m*width/5+width/10, height/10+2*separacionBloque, 1);
   }
 }
 
@@ -345,17 +345,16 @@ void mouseClicked() {
     pantalla=2;
     pausaColor=0;
   }
-  if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2 && pantalla==4) {  //Pulsar boton Retry
+  if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2 && colorRetry==255 && pantalla==4) {  //Pulsar boton Retry
     background(200);
     colorPerdido=200;
     declaracionVariables();
     pantalla=1;
   }
-  if (mouseX>width*2/3-diametroRetry/2 && mouseX<width*2/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2 && pantalla==4) {   //Pulsar botn Menu
+  if (mouseX>width*2/3-diametroRetry/2 && mouseX<width*2/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2 && colorHome==255 && pantalla==4) {   //Pulsar botn Menu
     background(200);
     colorPerdido=200;
     declaracionVariables();
     pantalla=0;
   }
 }
-
