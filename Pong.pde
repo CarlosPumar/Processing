@@ -22,6 +22,9 @@ int alturaPaleta=5;
 float posXpaleta;
 float posYpaleta;
 
+//Variable para el rectangulo de informacion en Juego
+int rectInfo;
+
 int pantalla; //Variable para cambio de pantalla
 
 //Variables para el contador
@@ -41,7 +44,7 @@ float colorRetry;
 //simbolo home
 int ladoHome=40;
 float colorHome; 
- 
+
 //Variables para los bloque
 int separacionBloque=35;
 
@@ -50,7 +53,8 @@ Bloque[] y2Bloque = new Bloque[5];
 Bloque[] y3Bloque = new Bloque[5];
 
 void setup() {
-  size(625, 500);
+  size(700, 600);
+  rectInfo=height/20;
   rectMode(CENTER);
   declaracionVariables();
 }
@@ -87,7 +91,7 @@ void declaracionVariables() {
   numeroContador=3;
   cont=0;
   posXball=radio;
-  posYball=height/10+2.5*separacionBloque;
+  posYball=height/10+rectInfo+2.5*separacionBloque;
   velX=5;
   velY=5;
   velXmax=inicioVelXmax;
@@ -103,6 +107,7 @@ void menu() {
   fill(0);
   strokeWeight(1);
   textAlign(CENTER);
+  textSize(50);
   text("PING PONG", width/2, height*1/3);
 
   // boton Play
@@ -143,7 +148,7 @@ void contador() {  //Contador al principio de partidas
 void contadorNumero() { //Animacion de cada numero del contador
 
   if (numeroContador>0) {
-    textSize(50);
+    textSize(height/7);
     textAlign(CENTER);
     background(200);
     fill(colorContador);
@@ -181,24 +186,30 @@ void juego() {
     velX=velX*(-1);
   }
   //ReboteY
-  if (posYball<=radio) {
+  if (posYball<=radio+rectInfo) {
     velY=velY*(-1);
   }
   //Rebote con la paleta
   if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio && posYball<=height*9/10+radio) { 
     rebotePaleta();
-   }
+  }
   //Perder
   if (posYball>=height-radio) {
     pantalla=4;
   }
 }
 
-void dibujarElementos() {   //dibuja background, bloques, pelota y paleta
+void dibujarElementos() {   //dibuja background, rectangulo de informacion, bloques, pelota y paleta
   background(200-pausaColor);
+  fill(170-pausaColor);
+  rectMode(CORNER);
+  rect(0, 0, width, rectInfo);
+  rectMode(CENTER);
+
   fill(posXball*255/width-pausaColor);
   ellipse(posXball, posYball, radio*2, radio*2);
   rect(posXpaleta, posYpaleta, anchuraPaleta, alturaPaleta);
+
   dibujarBloque();
 }
 
@@ -242,13 +253,13 @@ class Bloque {
 
 void crearBloque() {
   for (int i=0; i< y1Bloque.length; i++) {
-    y1Bloque[i]= new Bloque(i*width/5+width/10, height/10, 1);
+    y1Bloque[i]= new Bloque(i*width/5+width/10, height/10+rectInfo, 1);
   }
   for (int h=0; h< y2Bloque.length; h++) {
-    y2Bloque[h]= new Bloque(h*width/5+width/10, height/10+separacionBloque, 1);
+    y2Bloque[h]= new Bloque(h*width/5+width/10, height/10+rectInfo+separacionBloque, 1);
   }  
   for (int m=y3Bloque.length/8; m< y3Bloque.length; m++) {
-    y3Bloque[m]= new Bloque(m*width/5+width/10, height/10+2*separacionBloque, 1);
+    y3Bloque[m]= new Bloque(m*width/5+width/10, height/10+rectInfo+2*separacionBloque, 1);
   }
 }
 
@@ -282,6 +293,7 @@ void pausa() {
     fill(255, 0, 0);
   }
   textAlign(CENTER);
+  textSize(50);
   text("PAUSE", width/2, height/2);
 }
 
