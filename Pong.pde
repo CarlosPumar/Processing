@@ -101,7 +101,8 @@ void draw() {
 
 
 void declaracionVariables() {
-  stroke(1);
+  strokeWeight(1);
+  stroke(0);
   vida=3;
   puntuacion=0;
   numeroContador=3;
