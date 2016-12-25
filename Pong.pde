@@ -17,7 +17,7 @@ float aumentoVelocidad=0.2;
 float difPos;
 
 //Variables para la paleta
-int anchuraPaleta=100;
+int anchuraPaleta=75;
 int alturaPaleta=5;
 float posXpaleta;
 float posYpaleta;
@@ -59,6 +59,10 @@ void draw() {
     break;
 
   case 3:
+    pausa();
+    break;
+
+  case 4:
     lose();
     break;
   }
@@ -77,6 +81,8 @@ void declaracionVariables() {
   velYmax=sqrt(sq(velXmax)+sq(velYmin));
 }
 
+
+//MENU
 void menu() {
   background(200);
   textSize(50);
@@ -99,6 +105,8 @@ void menu() {
 }
 
 
+
+//CONTADOR
 void contador() {  //Contador al principio de partidas
 
   if (cont == 0) {
@@ -116,7 +124,6 @@ void contador() {  //Contador al principio de partidas
     pantalla=2;
   }
 }
-
 
 void contadorNumero() { //Animacion de cada numero del contador
 
@@ -137,6 +144,9 @@ void contadorNumero() { //Animacion de cada numero del contador
   }
 }
 
+
+
+//JUEGO
 void juego() {
 
   background(200);
@@ -180,28 +190,6 @@ void rebotePaleta() {
   }
 }
 
-
-void lose() {   //Pantalla de LOSE y animacion para volver a intentar
-
-  background(200);
-  textSize(50);
-  fill(0);
-  textAlign(CENTER);
-  text("YOU LOSE", width/2, height/2);
-  fill(colorPerdido);
-  colorPerdido=colorPerdido-0.5;
-
-  if (colorPerdido<0) {
-    colorPerdido=0;
-  }
-
-  textSize(25);
-  text("SPACE TO RETRY", width/2, height*2/3);
-  text("M TO MENU", width/2, height*2/3+50);
-}
-
-//BLOQUES
-
 class Bloque {
 
   int x, y, z, anchura, altura;
@@ -210,7 +198,7 @@ class Bloque {
     x=posX;
     y=posY;
     z=estado;
-    anchura=75;
+    anchura=50;
     altura=10;
   }
   void dibujar() {
@@ -255,6 +243,31 @@ void dibujarBloque() {
   }
 }
 
+
+
+//LOSE
+void lose() {   //Pantalla de LOSE y animacion para volver a intentar
+
+  background(200);
+  textSize(50);
+  fill(0);
+  textAlign(CENTER);
+  text("YOU LOSE", width/2, height/2);
+  fill(colorPerdido);
+  colorPerdido=colorPerdido-0.5;
+
+  if (colorPerdido<0) {
+    colorPerdido=0;
+  }
+
+  textSize(25);
+  text("SPACE TO RETRY", width/2, height*2/3);
+  text("M TO MENU", width/2, height*2/3+50);
+}
+
+
+
+//RESTO
 void keyPressed() {    //Al perder para reiniciar o para volver al menu
 
   if (key==32 && pantalla==3) {
