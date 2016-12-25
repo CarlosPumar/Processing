@@ -31,7 +31,16 @@ int numeroContador;
 //Variables para los colores
 int colorContador;
 float colorPerdido=200;
+int estado_colorPerdido;
 int pausaColor;
+
+//simbolo retry
+int diametroRetry=50;
+float colorRetry;
+
+//simbolo home
+int ladoHome=40;
+float colorHome; 
 
 Bloque[] y1Bloque = new Bloque[4];
 Bloque[] y2Bloque = new Bloque[4];
@@ -71,6 +80,7 @@ void draw() {
 
 
 void declaracionVariables() {
+  stroke(1);
   numeroContador=3;
   cont=0;
   posXball=radio;
@@ -88,6 +98,7 @@ void menu() {
   background(200);
   textSize(50);
   fill(0);
+  strokeWeight(1);
   textAlign(CENTER);
   text("PING PONG", width/2, height*1/3);
 
@@ -180,7 +191,7 @@ void juego() {
   }
 }
 
-void dibujarElementos() {
+void dibujarElementos() {   //dibuja background, bloques, pelota y paleta
   background(200-pausaColor);
   fill(posXball*255/width-pausaColor);
   ellipse(posXball, posYball, radio*2, radio*2);
@@ -188,7 +199,7 @@ void dibujarElementos() {
   dibujarBloque();
 }
 
-void rebotePaleta() {
+void rebotePaleta() {   //rebote de paleta en funcion de difPos
 
   velXmax=velXmax+aumentoVelocidad;
   velYmin=velYmin+aumentoVelocidad;
@@ -228,13 +239,13 @@ class Bloque {
 
 void crearBloque() {
   for (int i=0; i< y1Bloque.length; i++) {
-    y1Bloque[i]= new Bloque(i*125+60, 20, 1);
+    y1Bloque[i]= new Bloque(i*125+60, 40, 1);
   }
   for (int h=0; h< y2Bloque.length; h++) {
-    y2Bloque[h]= new Bloque(h*125+60, 50, 1);
+    y2Bloque[h]= new Bloque(h*125+60, 70, 1);
   }  
   for (int m=y3Bloque.length/8; m< y3Bloque.length; m++) {
-    y3Bloque[m]= new Bloque(m*125+60, 80, 1);
+    y3Bloque[m]= new Bloque(m*125+60, 100, 1);
   }
 }
 
@@ -279,36 +290,45 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   textSize(50);
   fill(0);
   textAlign(CENTER);
-  text("YOU LOSE", width/2, height/2);
+  text("YOU LOSE", width/2, height/2-50);
   fill(colorPerdido);
-  colorPerdido=colorPerdido-0.5;
 
-  if (colorPerdido<0) {
+  colorPerdido=colorPerdido-1.5;
+  colorRetry=colorPerdido;
+  colorHome=colorPerdido;
+
+  if (colorPerdido<0 ) { 
     colorPerdido=0;
-  }
 
-  textSize(25);
-  text("SPACE TO RETRY", width/2, height*2/3);
-  text("M TO MENU", width/2, height*2/3+50);
+    if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2) {
+      colorRetry=255;
+    }
+    if (mouseX>width*2/3-diametroRetry/2 && mouseX<width*2/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2) {
+      colorHome=255;
+    }
+  }
+  //simbolo retry
+  noFill();
+  strokeWeight(12);
+  stroke(colorRetry);
+  arc(width*1/3, height*3/4, diametroRetry, diametroRetry, 0, PI*3/2);
+  fill(colorRetry);
+  triangle(width*1/3, height*3/4-diametroRetry/4, width*1/3, height*3/4-(diametroRetry*3)/4, width*1/3+diametroRetry/3, height*3/4-diametroRetry/2);
+
+  //boton menu
+  strokeWeight(1);
+  noStroke();
+  fill(colorHome);
+
+  rect(width*2/3, height*3/4, ladoHome, ladoHome);
+  triangle(width*2/3-ladoHome/2-10, height*3/4-ladoHome/2, width*2/3+ladoHome/2+10, height*3/4-ladoHome/2, width*2/3, height*3/4-ladoHome-5);
 }
 
 
 
-//RESTO
-void keyPressed() {    //Al perder para reiniciar o para volver al menu
+//BOTONES Y TECLAS
+void keyPressed() {  
 
-  if (key==32 && pantalla==4) {  //Al perder, reiniciar
-    background(200);
-    colorPerdido=200;
-    declaracionVariables();
-    pantalla=1;
-  }
-  if (key==109 && pantalla==4) {   //Al perder, volver al menu
-    background(200);
-    colorPerdido=200;
-    declaracionVariables();
-    pantalla=0;
-  }
   if (key==112 && pantalla==2) {   //Pause
     pantalla=3;
   }
@@ -322,6 +342,17 @@ void mouseClicked() {
     pantalla=2;
     pausaColor=0;
   }
+  if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2 && pantalla==4) {  //Pulsar boton Retry
+    background(200);
+    colorPerdido=200;
+    declaracionVariables();
+    pantalla=1;
+  }
+  if (mouseX>width*2/3-diametroRetry/2 && mouseX<width*2/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2 && pantalla==4) {   //Pulsar botn Menu
+    background(200);
+    colorPerdido=200;
+    declaracionVariables();
+    pantalla=0;
+  }
 }
 
-}
