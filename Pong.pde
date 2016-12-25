@@ -24,7 +24,7 @@ float posYpaleta;
 
 int pantalla; //Variable para cambio de pantalla
 
-//Variable para el contador
+//Variables para el contador
 int cont; 
 int numeroContador;
 
@@ -41,6 +41,9 @@ float colorRetry;
 //simbolo home
 int ladoHome=40;
 float colorHome; 
+ 
+//Variables para los bloque
+int separacionBloque=35;
 
 Bloque[] y1Bloque = new Bloque[4];
 Bloque[] y2Bloque = new Bloque[4];
@@ -147,7 +150,7 @@ void contadorNumero() { //Animacion de cada numero del contador
     text(numeroContador, width/2, height/2);
   }
 
-  colorContador=colorContador+2;
+  colorContador=colorContador+3;
   if (colorContador>=200) {
     background(200);
     colorContador=0;
@@ -182,9 +185,9 @@ void juego() {
     velY=velY*(-1);
   }
   //Rebote con la paleta
-  if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio) { 
+  if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio && posYball<=height*9/10+radio) { 
     rebotePaleta();
-  }
+   }
   //Perder
   if (posYball>=height-radio) {
     pantalla=4;
@@ -239,13 +242,13 @@ class Bloque {
 
 void crearBloque() {
   for (int i=0; i< y1Bloque.length; i++) {
-    y1Bloque[i]= new Bloque(i*125+60, 40, 1);
+    y1Bloque[i]= new Bloque(i*125+60, height/10, 1);
   }
   for (int h=0; h< y2Bloque.length; h++) {
-    y2Bloque[h]= new Bloque(h*125+60, 70, 1);
+    y2Bloque[h]= new Bloque(h*125+60, height/10+separacionBloque, 1);
   }  
   for (int m=y3Bloque.length/8; m< y3Bloque.length; m++) {
-    y3Bloque[m]= new Bloque(m*125+60, 100, 1);
+    y3Bloque[m]= new Bloque(m*125+60, height/10+2*separacionBloque, 1);
   }
 }
 
