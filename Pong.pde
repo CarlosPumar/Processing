@@ -247,7 +247,7 @@ void juego() {
       velY=velYmax*sqrt(0.5);
     }
   }
-  if (puntuacion==15) {
+  if (puntuacion==numBloques*3) {  //Win
     pantalla=5;
   }
 }
@@ -426,7 +426,7 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
 
 
 //WIN
-void win() {   //Pantalla de LOSE y animacion para volver a intentar
+void win() {   //Pantalla de WIN y animacion de botones Home y Exit
 
   background(200);
   textSize(50);
@@ -551,4 +551,5 @@ void mouseClicked() {
     exit();
   }
 }
+
 
