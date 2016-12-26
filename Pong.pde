@@ -229,17 +229,20 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
 
   background(200-pausaColor); 
 
+  //rect info
   fill(170-pausaColor);
   rectMode(CORNER);
   rect(0, 0, width, rectInfo);
   rectMode(CENTER);
-
+  
+  //Score
   fill(255-pausaColor);
   textAlign(CORNER);
   textSize(25);
-  text("SCORE :", width*7/10, rectInfo-5);
-  text(puntuacion, width*9/10, rectInfo-5);
-
+  text("SCORE :", width*7/10, rectInfo*5/6);
+  text(puntuacion, width*9/10, rectInfo*5/6);
+  
+  //Pelotas Vida
   colorVida();
   fill(colorVida1, 0, 0);
   ellipse(width/20, rectInfo/2, radio, radio);
@@ -247,7 +250,8 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
   ellipse(width/20*2, rectInfo/2, radio, radio);
   fill(colorVida3, 0, 0);
   ellipse(width/20*3, rectInfo/2, radio, radio);
-
+  
+  //Pelota y paleta
   fill(posXball*255/width-pausaColor);
   ellipse(posXball, posYball, radio*2, radio*2);
   rect(posXpaleta, posYpaleta, anchuraPaleta, alturaPaleta);
@@ -258,10 +262,10 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
 void colorVida() {
 
   if (vida==2) {
-    colorVida3=150;
+    colorVida3=100;
   }
   if (vida==1) {
-    colorVida2=150;
+    colorVida2=100;
   }
   if (vida==0) {
     pantalla=4;
@@ -478,4 +482,3 @@ void mouseClicked() {
     exit();
   }
 }
-
