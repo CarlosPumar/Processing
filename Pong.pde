@@ -11,7 +11,7 @@ long previousMillis;
 long interval = 1000;           
 long currentMillis;
 int tiempo;
-int limiteTiempo=30;
+int limiteTiempo=45;
 
 //Variables de la bola
 float posXball;
@@ -76,7 +76,7 @@ Bloque[] y2Bloque = new Bloque[5];
 Bloque[] y3Bloque = new Bloque[5];
 
 void setup() {
-  size(500, 500);
+  size(700, 600);
   rectInfoHeight=height/20;
   rectMode(CENTER);
   declaracionVariables();
@@ -550,3 +550,4 @@ void mouseClicked() {
     exit();
   }
 }
+
