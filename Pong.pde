@@ -69,11 +69,12 @@ int ladoHome=40;
 float colorHome; 
 
 //Variables para los bloque
-int separacionBloque=35;
+int separacionBloque=50;
+int numBloques=6; //numero de bloques por fila
 
-Bloque[] y1Bloque = new Bloque[5];
-Bloque[] y2Bloque = new Bloque[5];
-Bloque[] y3Bloque = new Bloque[5];
+Bloque[] y1Bloque = new Bloque[numBloques];
+Bloque[] y2Bloque = new Bloque[numBloques];
+Bloque[] y3Bloque = new Bloque[numBloques];
 
 void setup() {
   size(700, 600);
@@ -356,13 +357,13 @@ class Bloque {
 
 void crearBloque() {
   for (int i=0; i< y1Bloque.length; i++) {
-    y1Bloque[i]= new Bloque(i*width/5+width/10, height/10+rectInfoHeight, 1);
+    y1Bloque[i]= new Bloque(i*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight, 1);
   }
   for (int h=0; h< y2Bloque.length; h++) {
-    y2Bloque[h]= new Bloque(h*width/5+width/10, height/10+rectInfoHeight+separacionBloque, 1);
+    y2Bloque[h]= new Bloque(h*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight+separacionBloque, 1);
   }  
   for (int m=y3Bloque.length/8; m< y3Bloque.length; m++) {
-    y3Bloque[m]= new Bloque(m*width/5+width/10, height/10+rectInfoHeight+2*separacionBloque, 1);
+    y3Bloque[m]= new Bloque(m*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight+2*separacionBloque, 1);
   }
 }
 
