@@ -23,7 +23,7 @@ float posXpaleta;
 float posYpaleta;
 
 //Variable para el rectangulo de informacion en Juego
-int rectInfo;
+int rectInfoHeight;
 
 //Vida
 int vida=3;
@@ -64,7 +64,7 @@ Bloque[] y3Bloque = new Bloque[5];
 
 void setup() {
   size(700, 600);
-  rectInfo=height/20;
+  rectInfoHeight=height/20;
   rectMode(CENTER);
   declaracionVariables();
 }
@@ -108,7 +108,7 @@ void declaracionVariables() {
   numeroContador=3;
   cont=0;
   posXball=2*radio;
-  posYball=height/10+rectInfo+2.5*separacionBloque;
+  posYball=height/10+rectInfoHeight+2.5*separacionBloque;
   velX=5;
   velY=5;
   velXmax=inicioVelXmax;
@@ -202,7 +202,7 @@ void juego() {
     velX=velX*(-1);
   }
   //ReboteY
-  if (posYball<=radio+rectInfo) {
+  if (posYball<=radio+rectInfoHeight) {
     velY=velY*(-1);
   }
   //Rebote con la paleta
@@ -214,7 +214,7 @@ void juego() {
     vida--;
     if (vida>0) {
       posXball=radio;
-      posYball=height/10+rectInfo+2.5*separacionBloque;
+      posYball=height/10+rectInfoHeight+2.5*separacionBloque;
       velX=velYmax*sqrt(0.5);
       velY=velYmax*sqrt(0.5);
     }
@@ -231,24 +231,23 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
   //rect info
   fill(170-pausaColor);
   rectMode(CORNER);
-  rect(0, 0, width, rectInfo);
+  rect(0, 0, width, rectInfoHeight);
   rectMode(CENTER);
 
   //Score
   fill(255-pausaColor);
   textAlign(CORNER);
   textSize(25);
-  text("SCORE :", width*7/10, rectInfo*5/6);
-  text(puntuacion, width*9/10, rectInfo*5/6);
+  text("SCORE: " + puntuacion, width*7/10, rectInfoHeight*5/6);
 
   //Pelotas Vida
   colorVida();
   fill(colorVida1, 0, 0);
-  ellipse(width/20, rectInfo/2, radio, radio);
+  ellipse(width/20, rectInfoHeight/2, radio, radio);
   fill(colorVida2, 0, 0);
-  ellipse(width/20*2, rectInfo/2, radio, radio);
+  ellipse(width/20*2, rectInfoHeight/2, radio, radio);
   fill(colorVida3, 0, 0);
-  ellipse(width/20*3, rectInfo/2, radio, radio);
+  ellipse(width/20*3, rectInfoHeight/2, radio, radio);
 
   //Pelota y paleta
   fill(posXball*255/width-pausaColor);
@@ -315,13 +314,13 @@ class Bloque {
 
 void crearBloque() {
   for (int i=0; i< y1Bloque.length; i++) {
-    y1Bloque[i]= new Bloque(i*width/5+width/10, height/10+rectInfo, 1);
+    y1Bloque[i]= new Bloque(i*width/5+width/10, height/10+rectInfoHeight, 1);
   }
   for (int h=0; h< y2Bloque.length; h++) {
-    y2Bloque[h]= new Bloque(h*width/5+width/10, height/10+rectInfo+separacionBloque, 1);
+    y2Bloque[h]= new Bloque(h*width/5+width/10, height/10+rectInfoHeight+separacionBloque, 1);
   }  
   for (int m=y3Bloque.length/8; m< y3Bloque.length; m++) {
-    y3Bloque[m]= new Bloque(m*width/5+width/10, height/10+rectInfo+2*separacionBloque, 1);
+    y3Bloque[m]= new Bloque(m*width/5+width/10, height/10+rectInfoHeight+2*separacionBloque, 1);
   }
 }
 
@@ -485,4 +484,5 @@ void mouseClicked() {
     exit();
   }
 }
+
 
