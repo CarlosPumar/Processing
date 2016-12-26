@@ -40,7 +40,7 @@ int cont;
 int numeroContador;
 
 //Variables para los colores
-int colorContador;
+int contador_color;
 float colorBotones=200;
 int estado_colorPerdido;
 int pausaColor;
@@ -117,14 +117,14 @@ void declaracionVariables() {
 }
 
 
+
 //MENU
 void menu() {
-  background(200);
-  textSize(50);
-  fill(0);
+
   strokeWeight(1);
   textAlign(CENTER);
   textSize(50);
+  fill(0);
   text("PING PONG", width/2, height*1/3);
 
   // boton Play
@@ -140,7 +140,6 @@ void menu() {
     text("PLAY", width/2, height*2/3+20);
   }
 }
-
 
 
 //CONTADOR
@@ -168,14 +167,14 @@ void contadorNumero() { //Animacion de cada numero del contador
     textSize(height/7);
     textAlign(CENTER);
     background(200);
-    fill(colorContador);
+    fill(contador_color);
     text(numeroContador, width/2, height/2);
   }
 
-  colorContador=colorContador+3;
-  if (colorContador>=200) {
+  contador_color=contador_color+3;
+  if (contador_color>=200) {
     background(200);
-    colorContador=0;
+    contador_color=0;
     numeroContador--;
     cont++;
   }
@@ -234,14 +233,14 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
   rectMode(CORNER);
   rect(0, 0, width, rectInfo);
   rectMode(CENTER);
-  
+
   //Score
   fill(255-pausaColor);
   textAlign(CORNER);
   textSize(25);
   text("SCORE :", width*7/10, rectInfo*5/6);
   text(puntuacion, width*9/10, rectInfo*5/6);
-  
+
   //Pelotas Vida
   colorVida();
   fill(colorVida1, 0, 0);
@@ -250,7 +249,7 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
   ellipse(width/20*2, rectInfo/2, radio, radio);
   fill(colorVida3, 0, 0);
   ellipse(width/20*3, rectInfo/2, radio, radio);
-  
+
   //Pelota y paleta
   fill(posXball*255/width-pausaColor);
   ellipse(posXball, posYball, radio*2, radio*2);
@@ -391,7 +390,9 @@ void win() {   //Pantalla de LOSE y animacion para volver a intentar
   text("made by Carlos Pumar", width/2, height/2-50);
 }
 
-void botones() {
+void botones() {  //botones Home, Retry y Exit dependiendo de la pantalla
+
+  //Animacion de todos los botones
   fill(colorBotones);
 
   colorBotones=colorBotones-1.5;
@@ -402,18 +403,24 @@ void botones() {
   if (colorBotones<0 ) { 
     colorBotones=0;
 
-    if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2) {
-      colorRetry=255;
-    }
+    //Si raton esta encima del boton Home, cambia a color blanco
     if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2) {
       colorHome=255;
     }
+    //Si raton esta encima del boton Retry, cambia a color blanco
+    if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2) {
+      colorRetry=255;
+    }
+    //Si raton esta encima del boton Exit, cambia a color blanco
     if (mouseX>width*1/3-50 && mouseX<width*1/3+50 && mouseY>height*3/4-25 && mouseY<height*3/4+25) {
       colorExit=255;
     }
   }
 
+  //Home siempre se dibuja
   home();
+  
+  //Retry y Extit se dibujan dependiendo de la pantalla
   if (pantalla==4) {
     retry();
   } else {
@@ -421,9 +428,7 @@ void botones() {
   }
 }
 
-void retry() {
-
-  //simbolo retry
+void retry() {   //simbolo retry
   noFill();
   strokeWeight(12);
   stroke(colorRetry);
@@ -432,9 +437,7 @@ void retry() {
   triangle(width*1/3, height*3/4-diametroRetry/4, width*1/3, height*3/4-(diametroRetry*3)/4, width*1/3+diametroRetry/3, height*3/4-diametroRetry/2);
 }
 
-void home() {
-
-  //boton home
+void home() {  //simbolo home
   strokeWeight(1);
   noStroke();
   fill(colorHome);
@@ -442,7 +445,7 @@ void home() {
   triangle(width*2/3-ladoHome/2-10, height*3/4-ladoHome/2, width*2/3+ladoHome/2+10, height*3/4-ladoHome/2, width*2/3, height*3/4-ladoHome-5);
 }
 
-void salir() {
+void salir() {  //simbolo exit
 
   fill(colorExit);
   textSize(50);
@@ -466,7 +469,7 @@ void mouseClicked() {
     pantalla=2;
     pausaColor=0;
   }
-  if (colorHome==255 && (pantalla==4 || pantalla==5)) {   //Pulsar botn Menu
+  if (colorHome==255 && (pantalla==4 || pantalla==5)) {   //Pulsar boton Menu
     background(200);
     colorBotones=200;
     declaracionVariables();
@@ -482,3 +485,4 @@ void mouseClicked() {
     exit();
   }
 }
+
