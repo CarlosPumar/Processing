@@ -1,5 +1,18 @@
 /*Proyecto realizado por Carlos Pumar Jiménez,alumno del IES Vicente Aleixandre*/
 
+import ddf.minim.*;
+Minim cadena;
+AudioPlayer cancion;
+AudioPlayer cancionTriste;
+AudioPlayer juegoCompletado;
+
+//Variables para el tiempo
+long previousMillis;       
+long interval = 1000;           
+long currentMillis;
+int tiempo;
+int limiteTiempo=30;
+
 //Variables de la bola
 float posXball;
 float posYball;
@@ -63,10 +76,17 @@ Bloque[] y2Bloque = new Bloque[5];
 Bloque[] y3Bloque = new Bloque[5];
 
 void setup() {
-  size(700, 600);
+  size(500, 500);
   rectInfoHeight=height/20;
   rectMode(CENTER);
   declaracionVariables();
+
+  cadena = new Minim(this);
+  cancion= cadena.loadFile("juego.mp3");
+  cadena = new Minim(this);
+  cancionTriste = cadena.loadFile("cancionTriste.mp3");
+  cadena = new Minim(this);
+  juegoCompletado = cadena.loadFile("juegoCompletado.mp3");
 }
 
 
@@ -103,6 +123,7 @@ void draw() {
 void declaracionVariables() {
   strokeWeight(1);
   stroke(0);
+  tiempo=0;
   vida=3;
   puntuacion=0;
   numeroContador=3;
@@ -185,6 +206,12 @@ void contadorNumero() { //Animacion de cada numero del contador
 //JUEGO
 void juego() {
 
+  //Temporizador
+  currentMillis = millis();
+  temporizador();
+
+  cancion.play();  //tocar cancion
+
   //posicion de la pelota
   posXball=posXball+velX;
   posYball=posYball+velY;
@@ -209,7 +236,7 @@ void juego() {
   if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio && posYball<=height*9/10+radio) { 
     rebotePaleta();
   }
-  //Perder
+  //Restar vida
   if (posYball>=height-radio) {
     vida--;
     if (vida>0) {
@@ -224,7 +251,7 @@ void juego() {
   }
 }
 
-void dibujarElementos() {   //dibuja background, rectangulo de informacion, puntuacion, vida, bloques, pelota y paleta
+void dibujarElementos() {   //dibuja background, rectangulo de informacion, puntuacion, vida, temporizador, bloques, pelota y paleta
 
   background(200-pausaColor); 
 
@@ -239,6 +266,14 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
   textAlign(CORNER);
   textSize(25);
   text("SCORE: " + puntuacion, width*7/10, rectInfoHeight*5/6);
+
+  //Temporizador
+  if (tiempo<limiteTiempo-5) {
+    fill(255-pausaColor);
+  } else   fill(255-pausaColor, 0, 0);
+  textAlign(CORNER);
+  textSize(25);
+  text("TIEMPO: " + tiempo, width*3/10, rectInfoHeight*5/6);
 
   //Pelotas Vida
   colorVida();
@@ -257,6 +292,16 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
   dibujarBloque();
 }
 
+void temporizador() {
+  if  (currentMillis - previousMillis >= interval) {
+
+    previousMillis = currentMillis;
+
+    tiempo++;
+    println(tiempo);
+  }
+}
+
 void colorVida() {
 
   if (vida==2) {
@@ -265,11 +310,8 @@ void colorVida() {
   if (vida==1) {
     colorVida2=100;
   }
-  if (vida==0) {
+  if (vida==0 || tiempo==limiteTiempo) {  //Perder
     pantalla=4;
-    colorVida1=255;
-    colorVida2=255;
-    colorVida3=255;
   }
 }
 
@@ -347,6 +389,7 @@ void dibujarBloque() {
 void pausa() {
   pausaColor=50;
   dibujarElementos();
+  cancion.pause();
 
   if (mouseX>width/2-75 && mouseX<width/2+75 && mouseY>height/2-45 && mouseY<height/2+5) {
     fill(255);
@@ -368,6 +411,14 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   textAlign(CENTER);
   text("YOU LOSE", width/2, height/2-50);
 
+  colorVida1=255;
+  colorVida2=255;
+  colorVida3=255;
+
+  cancion.pause();
+  cancion.rewind();
+  cancionTriste.play();
+
   botones();
 }
 
@@ -381,6 +432,14 @@ void win() {   //Pantalla de LOSE y animacion para volver a intentar
   fill(0);
   textAlign(CENTER);
   text("YOU WIN", width/2, height/2-150);
+
+  colorVida1=255;
+  colorVida2=255;
+  colorVida3=255;
+
+  cancion.pause();
+  cancion.rewind();
+  juegoCompletado.play();
 
   botones();
 
@@ -418,7 +477,7 @@ void botones() {  //botones Home, Retry y Exit dependiendo de la pantalla
 
   //Home siempre se dibuja
   home();
-  
+
   //Retry y Extit se dibujan dependiendo de la pantalla
   if (pantalla==4) {
     retry();
@@ -465,24 +524,29 @@ void mouseClicked() {
     pantalla=1;
   }
   if (mouseX>width/2-75 && mouseX<width/2+75 && mouseY>height/2-45 && mouseY<height/2+5) {    //Volver a Juego despues de Pause
-    pantalla=2;
     pausaColor=0;
+    pantalla=2;
   }
-  if (colorHome==255 && (pantalla==4 || pantalla==5)) {   //Pulsar boton Menu
+  if (colorHome==255 && (pantalla==4 || pantalla==5)) {   //Pulsar boton Home
     background(200);
     colorBotones=200;
     declaracionVariables();
+    cancionTriste.pause();
+    cancionTriste.rewind();
+    juegoCompletado.pause();
+    juegoCompletado.rewind();
+
     pantalla=0;
   }
   if (colorRetry==255 && pantalla==4) {  //Pulsar boton Retry
     background(200);
     colorBotones=200;
     declaracionVariables();
+    cancionTriste.pause();
+    cancionTriste.rewind();
     pantalla=1;
   }
-  if (colorExit==255 && pantalla==5) {  //Pulsar boton Retry
+  if (colorExit==255 && pantalla==5) {  //Pulsar boton Exit
     exit();
   }
 }
-
-
