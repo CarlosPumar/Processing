@@ -146,7 +146,7 @@ void menu() {
   strokeWeight(1);
   textAlign(CENTER);
   textSize(50);
-  fill(0);
+  fill(mouseX*255/width, mouseY*255/height, (mouseY+mouseX)*255/(height+width));
   text("PING PONG", width/2, height*1/3);
 
   // boton Play
@@ -408,7 +408,7 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
 
   background(200);
   textSize(50);
-  fill(0);
+  fill(30,30,(mouseX+mouseY)*100/(width+height)+100);
   textAlign(CENTER);
   text("YOU LOSE", width/2, height/2-50);
 
@@ -430,7 +430,7 @@ void win() {   //Pantalla de WIN y animacion de botones Home y Exit
 
   background(200);
   textSize(50);
-  fill(0);
+  fill((mouseX+mouseY)*100/(width+height)+100, (mouseX+mouseY)*100/(width+height)+100,40);
   textAlign(CENTER);
   text("YOU WIN", width/2, height/2-150);
 
@@ -536,7 +536,6 @@ void mouseClicked() {
     cancionTriste.rewind();
     juegoCompletado.pause();
     juegoCompletado.rewind();
-
     pantalla=0;
   }
   if (colorRetry==255 && pantalla==4) {  //Pulsar boton Retry
@@ -551,5 +550,6 @@ void mouseClicked() {
     exit();
   }
 }
+
 
 
