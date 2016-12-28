@@ -131,6 +131,9 @@ void declaracionVariables() {
   pausaColor=0;
   tiempo=0;
   vida=3;
+  colorVida1=255;
+  colorVida2=255;
+  colorVida3=255;
   puntuacion=0;
   numeroContador=3;
   cont=0;
@@ -219,8 +222,8 @@ void juego() {
 
   if (volumen==1) {
     cancion.play();  //tocar cancion
-  }else cancion.pause();
-  
+  } else cancion.pause();
+
   //posicion de la pelota
   posXball=posXball+velX;
   posYball=posYball+velY;
@@ -305,11 +308,8 @@ void dibujarElementos() {   //dibuja background, rectangulo de informacion, punt
 
 void temporizador() {
   if  (currentMillis - previousMillis >= interval) {
-
     previousMillis = currentMillis;
-
     tiempo++;
-    println(tiempo);
   }
 }
 
@@ -317,12 +317,10 @@ void colorVida() {
 
   if (vida==2) {
     colorVida3=100;
-  } else colorVida3 =255;
-  
+  }
   if (vida==1) {
     colorVida2=100;
-  } else colorVida2 =255;
-  
+  } 
   if (vida==0 || tiempo==limiteTiempo) {  //Perder
     pantalla=4;
   }
@@ -368,10 +366,6 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
   textAlign(CENTER);
   text("YOU LOSE", width/2, height/2-50);
 
-  colorVida1=255;
-  colorVida2=255;
-  colorVida3=255;
-
   cancion.pause();
   cancion.rewind();
   cancionTriste.play();
@@ -389,10 +383,6 @@ void win() {   //Pantalla de WIN y animacion de botones Home y Exit
   fill((mouseX+mouseY)*100/(width+height)+100, (mouseX+mouseY)*100/(width+height)+100, 40);
   textAlign(CENTER);
   text("YOU WIN", width/2, height/2-150);
-
-  colorVida1=255;
-  colorVida2=255;
-  colorVida3=255;
 
   cancion.pause();
   cancion.rewind();
@@ -492,7 +482,7 @@ void volumen() {
   if (volumen == 0) {
     strokeWeight(10);
     stroke(colorVolumen);
-    line( width*1/3+30, height*31/40+30,width*1/3-40, height*31/40-70);
+    line( width*1/3+30, height*31/40+30, width*1/3-40, height*31/40-70);
   }
 }
 
@@ -504,7 +494,7 @@ void keyPressed() {
     pantalla=3;
   } 
   if (key==111 && pantalla==3) {
-    pantalla=2;
+    pantalla=2;  
     pausaColor=0;
   }
 }
