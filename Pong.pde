@@ -68,6 +68,10 @@ float colorRetry;
 int ladoHome=40;
 float colorHome; 
 
+//simbolo volumen
+int colorVolumen;
+int volumen=1;
+
 //Variables para los bloque
 int separacionBloque=50;
 int numBloques=6; //numero de bloques por fila
@@ -124,6 +128,7 @@ void draw() {
 void declaracionVariables() {
   strokeWeight(1);
   stroke(0);
+  pausaColor=0;
   tiempo=0;
   vida=3;
   puntuacion=0;
@@ -150,6 +155,7 @@ void menu() {
   text("PING PONG", width/2, height*1/3);
 
   // boton Play
+  rectMode(CENTER);
   if (mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+30 && mouseY>height*2/3-30) {
     fill(0);
     rect(width/2, height*2/3, 150, 60);
@@ -211,8 +217,10 @@ void juego() {
   currentMillis = millis();
   temporizador();
 
-  cancion.play();  //tocar cancion
-
+  if (volumen==1) {
+    cancion.play();  //tocar cancion
+  }else cancion.pause();
+  
   //posicion de la pelota
   posXball=posXball+velX;
   posYball=posYball+velY;
@@ -254,6 +262,8 @@ void juego() {
 
 void dibujarElementos() {   //dibuja background, rectangulo de informacion, puntuacion, vida, temporizador, bloques, pelota y paleta
 
+  stroke(0);
+  strokeWeight(1);
   background(200-pausaColor); 
 
   //rect info
@@ -307,10 +317,12 @@ void colorVida() {
 
   if (vida==2) {
     colorVida3=100;
-  }
+  } else colorVida3 =255;
+  
   if (vida==1) {
     colorVida2=100;
-  }
+  } else colorVida2 =255;
+  
   if (vida==0 || tiempo==limiteTiempo) {  //Perder
     pantalla=4;
   }
@@ -327,6 +339,208 @@ void rebotePaleta() {   //rebote de paleta en funcion de difPos
     velY= -(-difPos*(velYmin-velYmax)/(anchuraPaleta/2+radio)+velYmax);
   } else {
     velY= -(difPos*(velYmin-velYmax)/(anchuraPaleta/2+radio)+velYmax);
+  }
+}
+
+
+
+//PAUSA
+void pausa() {
+  pausaColor=50;
+  dibujarElementos();
+  cancion.pause();
+
+  botonesPause();
+
+  textAlign(CENTER);
+  textSize(50);
+  fill(255, 0, 0);
+  text("PAUSE", width/2, height/2);
+}
+
+
+//LOSE
+void lose() {   //Pantalla de LOSE y animacion para volver a intentar
+
+  background(200);
+  textSize(50);
+  fill(30, 30, (mouseX+mouseY)*100/(width+height)+100);
+  textAlign(CENTER);
+  text("YOU LOSE", width/2, height/2-50);
+
+  colorVida1=255;
+  colorVida2=255;
+  colorVida3=255;
+
+  cancion.pause();
+  cancion.rewind();
+  cancionTriste.play();
+
+  botonesFinal();
+}
+
+
+
+//WIN
+void win() {   //Pantalla de WIN y animacion de botones Home y Exit
+
+  background(200);
+  textSize(50);
+  fill((mouseX+mouseY)*100/(width+height)+100, (mouseX+mouseY)*100/(width+height)+100, 40);
+  textAlign(CENTER);
+  text("YOU WIN", width/2, height/2-150);
+
+  colorVida1=255;
+  colorVida2=255;
+  colorVida3=255;
+
+  cancion.pause();
+  cancion.rewind();
+  juegoCompletado.play();
+
+  botonesFinal();
+
+  fill(colorBotones);
+  textSize(30);
+  text("made by Carlos Pumar", width/2, height/2-50);
+}
+
+void botonesFinal() {  //botones Home, Retry y Exit dependiendo de la pantalla
+
+  //Animacion de todos los botones
+  fill(colorBotones);
+
+  colorBotones=colorBotones-1.5;
+  colorRetry=colorBotones;
+  colorHome=colorBotones;
+  colorExit=colorBotones;
+
+  if (colorBotones<0 ) { 
+    colorBotones=0;
+
+    //Si raton esta encima del boton Home, cambia a color blanco
+    if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2) {
+      colorHome=255;
+    }
+    //Si raton esta encima del boton Retry, cambia a color blanco
+    if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2) {
+      colorRetry=255;
+    }
+    //Si raton esta encima del boton Exit, cambia a color blanco
+    if (mouseX>width*1/3-50 && mouseX<width*1/3+50 && mouseY>height*3/4-25 && mouseY<height*3/4+25) {
+      colorExit=255;
+    }
+  }
+
+  //Home siempre se dibuja
+  home();
+
+  //Retry y Extit se dibujan dependiendo de la pantalla
+  if (pantalla==4) {
+    retry();
+  } else {
+    salir();
+  }
+}
+
+void botonesPause() {
+  if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2) {
+    colorHome=255;
+  } else {
+    colorHome=0;
+  }
+  home();
+
+  if (mouseX>width*1/3-50 && mouseX<width*1/3+20 && mouseY>height*31/40-60 && mouseY<height*31/40+20) {
+    colorVolumen=255;
+  } else {
+    colorVolumen=0;
+  }
+  volumen();
+}
+
+void retry() {   //simbolo retry
+  noFill();
+  strokeWeight(12);
+  stroke(colorRetry);
+  arc(width*1/3, height*3/4, diametroRetry, diametroRetry, 0, PI*3/2);
+  fill(colorRetry);
+  triangle(width*1/3, height*3/4-diametroRetry/4, width*1/3, height*3/4-(diametroRetry*3)/4, width*1/3+diametroRetry/3, height*3/4-diametroRetry/2);
+}
+
+void home() {  //simbolo home
+  strokeWeight(1);
+  noStroke();
+  fill(colorHome);
+  rect(width*2/3, height*3/4, ladoHome, ladoHome);
+  triangle(width*2/3-ladoHome/2-10, height*3/4-ladoHome/2, width*2/3+ladoHome/2+10, height*3/4-ladoHome/2, width*2/3, height*3/4-ladoHome-5);
+}
+
+void salir() {  //simbolo exit
+  fill(colorExit);
+  textSize(50);
+  text("EXIT", width*1/3, height*31/40);
+}
+
+void volumen() {
+  fill(colorVolumen);
+  noStroke();
+  rectMode(CORNER);
+  rect(width*1/3-50, height*31/40-30, 20, 20);
+  quad(width*1/3-30, height*31/40-30, width*1/3+20, height*31/40-60, width*1/3+20, height*31/40+20, width*1/3-30, height*31/40-10);
+
+  if (volumen == 0) {
+    strokeWeight(10);
+    stroke(colorVolumen);
+    line( width*1/3+30, height*31/40+30,width*1/3-40, height*31/40-70);
+  }
+}
+
+
+//BOTONES Y TECLAS
+void keyPressed() {  
+
+  if (key==112 && pantalla==2) {
+    pantalla=3;
+  } 
+  if (key==111 && pantalla==3) {
+    pantalla=2;
+    pausaColor=0;
+  }
+}
+
+
+void mouseClicked() {  
+  if (pantalla==0 && mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+30 && mouseY>height*2/3-30) {   //Pulsar Play en el menu
+    pantalla=1;
+  }
+  if (colorHome==255 && (pantalla==3 || pantalla==4 || pantalla==5)) {   //Pulsar boton Home
+    background(200);
+    colorBotones=200;
+    declaracionVariables();
+    cancion.pause();
+    cancion.rewind();
+    cancionTriste.pause();
+    cancionTriste.rewind();
+    juegoCompletado.pause();
+    juegoCompletado.rewind();
+    pantalla=0;
+  }
+  if (colorRetry==255 && pantalla==4) {  //Pulsar boton Retry
+    background(200);
+    colorBotones=200;
+    declaracionVariables();
+    cancionTriste.pause();
+    cancionTriste.rewind();
+    pantalla=1;
+  }
+  if (colorExit==255 && pantalla==5) {  //Pulsar boton Exit
+    exit();
+  }
+  if (colorVolumen==255 && pantalla==3) {  //Pulsar boton Volumen
+    if (volumen==1) {
+      volumen=0;
+    } else volumen=1;
   }
 }
 
@@ -381,173 +595,6 @@ void dibujarBloque() {
   for (int m=0; m< y2Bloque.length; m ++) {
     y3Bloque[m].dibujar();
     y3Bloque[m].desaparecer();
-  }
-}
-
-
-
-//PAUSA
-void pausa() {
-  pausaColor=50;
-  dibujarElementos();
-  cancion.pause();
-
-  if (mouseX>width/2-75 && mouseX<width/2+75 && mouseY>height/2-45 && mouseY<height/2+5) {
-    fill(255);
-  } else {
-    fill(255, 0, 0);
-  }
-  textAlign(CENTER);
-  textSize(50);
-  text("PAUSE", width/2, height/2);
-}
-
-
-//LOSE
-void lose() {   //Pantalla de LOSE y animacion para volver a intentar
-
-  background(200);
-  textSize(50);
-  fill(30,30,(mouseX+mouseY)*100/(width+height)+100);
-  textAlign(CENTER);
-  text("YOU LOSE", width/2, height/2-50);
-
-  colorVida1=255;
-  colorVida2=255;
-  colorVida3=255;
-
-  cancion.pause();
-  cancion.rewind();
-  cancionTriste.play();
-
-  botones();
-}
-
-
-
-//WIN
-void win() {   //Pantalla de WIN y animacion de botones Home y Exit
-
-  background(200);
-  textSize(50);
-  fill((mouseX+mouseY)*100/(width+height)+100, (mouseX+mouseY)*100/(width+height)+100,40);
-  textAlign(CENTER);
-  text("YOU WIN", width/2, height/2-150);
-
-  colorVida1=255;
-  colorVida2=255;
-  colorVida3=255;
-
-  cancion.pause();
-  cancion.rewind();
-  juegoCompletado.play();
-
-  botones();
-
-  fill(colorBotones);
-  textSize(30);
-  text("made by Carlos Pumar", width/2, height/2-50);
-}
-
-void botones() {  //botones Home, Retry y Exit dependiendo de la pantalla
-
-  //Animacion de todos los botones
-  fill(colorBotones);
-
-  colorBotones=colorBotones-1.5;
-  colorRetry=colorBotones;
-  colorHome=colorBotones;
-  colorExit=colorBotones;
-
-  if (colorBotones<0 ) { 
-    colorBotones=0;
-
-    //Si raton esta encima del boton Home, cambia a color blanco
-    if (mouseX>width*2/3-ladoHome/2 && mouseX<width*2/3+ladoHome/2 && mouseY>height*3/4-ladoHome && mouseY<height*3/4+ladoHome/2) {
-      colorHome=255;
-    }
-    //Si raton esta encima del boton Retry, cambia a color blanco
-    if (mouseX>width*1/3-diametroRetry/2 && mouseX<width*1/3+diametroRetry/2 && mouseY>height*3/4-diametroRetry && mouseY<height*3/4+diametroRetry/2) {
-      colorRetry=255;
-    }
-    //Si raton esta encima del boton Exit, cambia a color blanco
-    if (mouseX>width*1/3-50 && mouseX<width*1/3+50 && mouseY>height*3/4-25 && mouseY<height*3/4+25) {
-      colorExit=255;
-    }
-  }
-
-  //Home siempre se dibuja
-  home();
-
-  //Retry y Extit se dibujan dependiendo de la pantalla
-  if (pantalla==4) {
-    retry();
-  } else {
-    salir();
-  }
-}
-
-void retry() {   //simbolo retry
-  noFill();
-  strokeWeight(12);
-  stroke(colorRetry);
-  arc(width*1/3, height*3/4, diametroRetry, diametroRetry, 0, PI*3/2);
-  fill(colorRetry);
-  triangle(width*1/3, height*3/4-diametroRetry/4, width*1/3, height*3/4-(diametroRetry*3)/4, width*1/3+diametroRetry/3, height*3/4-diametroRetry/2);
-}
-
-void home() {  //simbolo home
-  strokeWeight(1);
-  noStroke();
-  fill(colorHome);
-  rect(width*2/3, height*3/4, ladoHome, ladoHome);
-  triangle(width*2/3-ladoHome/2-10, height*3/4-ladoHome/2, width*2/3+ladoHome/2+10, height*3/4-ladoHome/2, width*2/3, height*3/4-ladoHome-5);
-}
-
-void salir() {  //simbolo exit
-
-  fill(colorExit);
-  textSize(50);
-  text("EXIT", width*1/3, height*31/40);
-}
-
-
-//BOTONES Y TECLAS
-void keyPressed() {  
-
-  if (key==112 && pantalla==2) {   //Pause
-    pantalla=3;
-  }
-}
-
-void mouseClicked() {  
-  if (pantalla==0 && mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+30 && mouseY>height*2/3-30) {   //Pulsar Play en el menu
-    pantalla=1;
-  }
-  if (mouseX>width/2-75 && mouseX<width/2+75 && mouseY>height/2-45 && mouseY<height/2+5) {    //Volver a Juego despues de Pause
-    pausaColor=0;
-    pantalla=2;
-  }
-  if (colorHome==255 && (pantalla==4 || pantalla==5)) {   //Pulsar boton Home
-    background(200);
-    colorBotones=200;
-    declaracionVariables();
-    cancionTriste.pause();
-    cancionTriste.rewind();
-    juegoCompletado.pause();
-    juegoCompletado.rewind();
-    pantalla=0;
-  }
-  if (colorRetry==255 && pantalla==4) {  //Pulsar boton Retry
-    background(200);
-    colorBotones=200;
-    declaracionVariables();
-    cancionTriste.pause();
-    cancionTriste.rewind();
-    pantalla=1;
-  }
-  if (colorExit==255 && pantalla==5) {  //Pulsar boton Exit
-    exit();
   }
 }
 
