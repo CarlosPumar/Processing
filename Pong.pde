@@ -1,5 +1,6 @@
 /*Proyecto realizado por Carlos Pumar Jiménez,alumno del IES Vicente Aleixandre*/
 
+//audio
 import ddf.minim.*;
 Minim cadena;
 AudioPlayer cancion;
@@ -490,12 +491,15 @@ void volumen() {
 //BOTONES Y TECLAS
 void keyPressed() {  
 
-  if (key==112 && pantalla==2) {
-    pantalla=3;
-  } 
-  if (key==111 && pantalla==3) {
-    pantalla=2;  
-    pausaColor=0;
+  //pausa
+  if (key=='p' ) {
+    println(pantalla);
+    if (pantalla==2) {
+      pantalla=3;
+    } else if (pantalla==3) {
+      pantalla=2;  
+      pausaColor=0;
+    }
   }
 }
 
@@ -587,6 +591,3 @@ void dibujarBloque() {
     y3Bloque[m].desaparecer();
   }
 }
-
-
-
