@@ -1,4 +1,4 @@
-/*Proyecto realizado por Carlos Pumar Jiménez,alumno del IES Vicente Aleixandre*/
+/*Proyecto realizado por Carlos Pumar Jiménez, alumno del IES Vicente Aleixandre en la asignatura Prgramación y Computación. Entregado el día 31/01/2017*/
 
 //audio
 import ddf.minim.*;
@@ -76,16 +76,19 @@ int volumen=1;
 //Variables para los bloque
 int separacionBloque=50;
 int numBloques=6; //numero de bloques por fila
+int nivelbloque=1;
 
 Bloque[] y1Bloque = new Bloque[numBloques];
 Bloque[] y2Bloque = new Bloque[numBloques];
 Bloque[] y3Bloque = new Bloque[numBloques];
 
 void setup() {
+  frameRate(60);
   size(700, 600);
   rectInfoHeight=height/20;
   rectMode(CENTER);
   declaracionVariables();
+  nivelbloque=1;
 
   cadena = new Minim(this);
   cancion= cadena.loadFile("juego.mp3");
@@ -97,6 +100,7 @@ void setup() {
 
 
 void draw() {
+  println(cont);
 
   switch(pantalla) {
   case 0:
@@ -112,14 +116,18 @@ void draw() {
     break;
 
   case 3:
-    pausa();
+    juego2();
     break;
 
   case 4:
-    lose();
+    pausa();
     break;
 
   case 5:
+    lose();
+    break;
+
+  case 6:
     win();
     break;
   }
@@ -189,10 +197,13 @@ void contador() {  //Contador al principio de partidas
   if (cont == 3) {
     contadorNumero();
     crearBloque();
-    pantalla=2;
+    if (nivelbloque==1) {
+      pantalla=2;
+    } else {
+      pantalla=3;
+    }
   }
 }
-
 void contadorNumero() { //Animacion de cada numero del contador
 
   if (numeroContador>0) {
@@ -220,6 +231,59 @@ void juego() {
   //Temporizador
   currentMillis = millis();
   temporizador();
+  limiteTiempo=45;
+  if (volumen==1) {
+    cancion.play();  //tocar cancion
+  } else cancion.pause();
+
+  //posicion de la pelota
+  posXball=posXball+velX;
+  posYball=posYball+velY;
+
+  //posicion de la paleta
+  posXpaleta=mouseX;
+  posYpaleta=height*9/10;
+
+  dibujarElementos();
+
+  difPos=posXball-mouseX;
+
+  //ReboteX
+  if (posXball>=width-radio || posXball<=radio) {
+    velX=velX*(-1);
+  }
+  //ReboteY
+  if (posYball<=radio+rectInfoHeight) {
+    velY=velY*(-1);
+  }
+  //Rebote con la paleta
+  if ( difPos<=anchuraPaleta/2+radio && difPos>=-(anchuraPaleta/2+radio) && posYball>=height*9/10-radio && posYball<=height*9/10+radio) { 
+    rebotePaleta();
+  }
+  //Restar vida
+  if (posYball>=height-radio) {
+    vida--;
+    if (vida>0) {
+      posXball=radio;
+      posYball=height/10+rectInfoHeight+2.5*separacionBloque;
+      velX=velYmax*sqrt(0.5);
+      velY=velYmax*sqrt(0.5);
+    }
+  }
+  if (puntuacion==numBloques*3 && pantalla==2) {  //Win
+    declaracionVariables();
+    pantalla=1;
+    nivelbloque=2;
+  }
+}
+
+//JUEGO 2
+void juego2() {
+
+  //Temporizador
+  currentMillis = millis();
+  temporizador();
+  limiteTiempo=60;
 
   if (volumen==1) {
     cancion.play();  //tocar cancion
@@ -259,8 +323,10 @@ void juego() {
       velY=velYmax*sqrt(0.5);
     }
   }
-  if (puntuacion==numBloques*3) {  //Win
-    pantalla=5;
+  if (puntuacion==numBloques*3 && pantalla==3) {  //Win
+    nivelbloque=1;
+    declaracionVariables();
+    pantalla=6;
   }
 }
 
@@ -323,7 +389,7 @@ void colorVida() {
     colorVida2=100;
   } 
   if (vida==0 || tiempo==limiteTiempo) {  //Perder
-    pantalla=4;
+    pantalla=5;
   }
 }
 
@@ -361,6 +427,7 @@ void pausa() {
 //LOSE
 void lose() {   //Pantalla de LOSE y animacion para volver a intentar
 
+  nivelbloque=1;
   background(200);
   textSize(50);
   fill(30, 30, (mouseX+mouseY)*100/(width+height)+100);
@@ -379,6 +446,7 @@ void lose() {   //Pantalla de LOSE y animacion para volver a intentar
 //WIN
 void win() {   //Pantalla de WIN y animacion de botones Home y Exit
 
+  nivelbloque=1;
   background(200);
   textSize(50);
   fill((mouseX+mouseY)*100/(width+height)+100, (mouseX+mouseY)*100/(width+height)+100, 40);
@@ -493,22 +561,22 @@ void keyPressed() {
 
   //pausa
   if (key=='p' ) {
-    println(pantalla);
-    if (pantalla==2) {
-      pantalla=3;
-    } else if (pantalla==3) {
-      pantalla=2;  
+    if (pantalla==2 || pantalla==3) {
+      pantalla=4;
+    } else if (pantalla==4 && nivelbloque==2) {
+      pantalla=4;  
+      pausaColor=0;
+    } else if (pantalla==4 && nivelbloque==1) {
+      pantalla=3;  
       pausaColor=0;
     }
   }
 }
-
-
 void mouseClicked() {  
   if (pantalla==0 && mouseX<width/2+75 && mouseX>width/2-75 && mouseY<height*2/3+30 && mouseY>height*2/3-30) {   //Pulsar Play en el menu
     pantalla=1;
   }
-  if (colorHome==255 && (pantalla==3 || pantalla==4 || pantalla==5)) {   //Pulsar boton Home
+  if (colorHome==255 && (pantalla==4 || pantalla==5 || pantalla==6)) {   //Pulsar boton Home
     background(200);
     colorBotones=200;
     declaracionVariables();
@@ -520,7 +588,7 @@ void mouseClicked() {
     juegoCompletado.rewind();
     pantalla=0;
   }
-  if (colorRetry==255 && pantalla==4) {  //Pulsar boton Retry
+  if (colorRetry==255 && pantalla==5) {  //Pulsar boton Retry
     background(200);
     colorBotones=200;
     declaracionVariables();
@@ -528,10 +596,10 @@ void mouseClicked() {
     cancionTriste.rewind();
     pantalla=1;
   }
-  if (colorExit==255 && pantalla==5) {  //Pulsar boton Exit
+  if (colorExit==255 && pantalla==6) {  //Pulsar boton Exit
     exit();
   }
-  if (colorVolumen==255 && pantalla==3) {  //Pulsar boton Volumen
+  if (colorVolumen==255 && pantalla==4) {  //Pulsar boton Volumen
     if (volumen==1) {
       volumen=0;
     } else volumen=1;
@@ -550,32 +618,42 @@ class Bloque {
     altura=10;
   }
   void dibujar() {
-    if (z==1) {
+    if (z == 2) {
+      fill(0, 0, 55+posXball*200/width-pausaColor);
+    } else {
+      fill(posXball*255/width-pausaColor);
+    }
+    if (z==1 || z==2) {
       rect(x, y, anchura, altura);
     }
   }
   void desaparecer() {
-    if (posXball>x-anchura/2-radio && posXball<x+anchura/2+radio && posYball>y-altura/2-radio && posYball<y+altura/2+radio && z==1) {
-      z=0;
-      velY= velY*(-1);
-      puntuacion++;
+    if (posXball>x-anchura/2-radio && posXball<x+anchura/2+radio && posYball>y-altura/2-radio && posYball<y+altura/2+radio) {
+      if (z==1) {
+        z=0;
+        velY= velY*(-1);
+        puntuacion++;
+      } else if (z==2) {
+        z=1;
+        velY= velY*(-1);
+      }
     }
   }
 }
-
 void crearBloque() {
   for (int i=0; i< y1Bloque.length; i++) {
-    y1Bloque[i]= new Bloque(i*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight, 1);
+    y1Bloque[i]= new Bloque(i*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight, nivelbloque);
   }
   for (int h=0; h< y2Bloque.length; h++) {
-    y2Bloque[h]= new Bloque(h*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight+separacionBloque, 1);
+    y2Bloque[h]= new Bloque(h*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight+separacionBloque, nivelbloque);
   }  
   for (int m=y3Bloque.length/8; m< y3Bloque.length; m++) {
-    y3Bloque[m]= new Bloque(m*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight+2*separacionBloque, 1);
+    y3Bloque[m]= new Bloque(m*width/numBloques+width/(2*numBloques), height/10+rectInfoHeight+2*separacionBloque, nivelbloque);
   }
 }
 
 void dibujarBloque() {
+
   for (int i=0; i< y1Bloque.length; i ++) {
     y1Bloque[i].dibujar();
     y1Bloque[i].desaparecer();
